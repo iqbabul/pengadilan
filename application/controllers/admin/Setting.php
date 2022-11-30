@@ -16,7 +16,7 @@ class Setting extends CI_Controller {
 	{
 		$login = $this->session->userdata('nama');
 		$data['user'] = $this->Model_user->getLogin($login)->row();
-		$data['event'] = $this->Model_event->getAll()->result();
+		$data['event'] = $this->Model_event->getAllAdm()->result();
 		$data['score'] = $this->Model_score->getAll()->row();
 		$id_user = $data['user']->id_user;
 		$this->load->view('layout/header',$data);

@@ -53,7 +53,7 @@
                     <i class="fa fa-fw fa-table"></i>
                     <span>Matriks</span></a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item <?php if($p=='hasil') echo 'active' ?>">
                 <a class="nav-link" href="<?=base_url('admin/hasil')?>">
                     <i class="fas fa-fw fa-file-alt"></i>
                     <span>Perangkingan</span></a>

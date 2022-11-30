@@ -33,8 +33,8 @@ class Data extends CI_Controller {
 		$this->load->view('layout/footer');
 	}
 
-	public function event_on(){
-		$data['event'] = $this->Model_event->getByStatus()->row();
+    public function event_on(){
+		$data['event'] = $this->Model_event->getMaxID()->row();
 		return $data['event']->id_event;
 	}
 
