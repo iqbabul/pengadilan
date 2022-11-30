@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 30 Nov 2022 pada 03.14
+-- Waktu pembuatan: 30 Nov 2022 pada 03.55
 -- Versi server: 10.1.38-MariaDB
 -- Versi PHP: 5.6.40
 
@@ -19,7 +19,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `upgency_kejaksaan`
+-- Database: `db_pengadilan`
 --
 
 -- --------------------------------------------------------
@@ -210,6 +210,26 @@ INSERT INTO `saw_event` (`id_event`, `title`, `status`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Struktur dari tabel `saw_score`
+--
+
+CREATE TABLE `saw_score` (
+  `id_score` int(11) NOT NULL,
+  `score` int(11) NOT NULL,
+  `desc` varchar(20) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data untuk tabel `saw_score`
+--
+
+INSERT INTO `saw_score` (`id_score`, `score`, `desc`) VALUES
+(1, 1, 'min'),
+(2, 5, 'max');
+
+-- --------------------------------------------------------
+
+--
 -- Struktur dari tabel `saw_users`
 --
 
@@ -271,6 +291,12 @@ ALTER TABLE `saw_event`
   ADD PRIMARY KEY (`id_event`);
 
 --
+-- Indeks untuk tabel `saw_score`
+--
+ALTER TABLE `saw_score`
+  ADD PRIMARY KEY (`id_score`);
+
+--
 -- Indeks untuk tabel `saw_users`
 --
 ALTER TABLE `saw_users`
@@ -310,6 +336,12 @@ ALTER TABLE `saw_evaluations`
 --
 ALTER TABLE `saw_event`
   MODIFY `id_event` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT untuk tabel `saw_score`
+--
+ALTER TABLE `saw_score`
+  MODIFY `id_score` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT untuk tabel `saw_users`
