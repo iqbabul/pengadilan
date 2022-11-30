@@ -33,7 +33,7 @@
                                 <tr>
                                     <td><?=$no++;?></td>
                                     <td><?=$row->criteria;?></td>
-                                    <td class="text-center"><?=$row->weight;?></td>
+                                    <td class="text-center"><?=number_format($row->weight,2, '.', '');?></td>
                                     <td><?=$row->attribute;?></td>
                                     <td>
                                     <button class="btn btn-sm btn-circle btn-primary"><i class="fas fa-edit"></i></button>
@@ -45,7 +45,7 @@
                                 <?php $jml+=$row->weight; endforeach; ?>
                                 <tr>
                                   <td colspan="2" class="text-center">Jumlah</td>
-                                  <td class="text-center"><?=$jml;?></td>
+                                  <td class="text-center"><?=number_format($jml,2, '.', '');?></td>
                                   <td colspan="3"></td>
                                 </tr>
                             </tbody>
