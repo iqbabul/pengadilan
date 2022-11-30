@@ -19,10 +19,12 @@
                         </ol>
                     </div>
                         <?php 
+                            $idv = $eventid;
                             $id_alternatif = $alternatif->id_alternative;
                             $usr = $user->id_user;
-                            $cr = $this->db->query("SELECT * FROM saw_criterias c 
-                            LEFT JOIN saw_evaluations e ON c.id_criteria = e.id_criteria AND e.id_alternative = '$id_alternatif' AND e.id_user = '$usr' WHERE c.status = 1")->result(); ?>
+                            $cr = $this->db->query("SELECT *, ev.status as evstatus FROM saw_criterias c 
+                            LEFT JOIN saw_event ev ON ev.id_event = c.id_event
+                            LEFT JOIN saw_evaluations e ON c.id_criteria = e.id_criteria AND e.id_alternative = '$id_alternatif' AND e.id_user = '$usr' WHERE c.id_event = '$idv' AND c.status = 1")->result(); ?>
                         <form action="<?=base_url('admin/penilaian/update')?>" method="post">
                         <input type="hidden" name="alternatif" value="<?=$alternatif->id_alternative;?>">
                             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
@@ -39,9 +41,13 @@
                                             <td><?=$no++;?></td>
                                             <td>(<?=$sult->alias;?>)</td>
                                             <td><?=$sult->criteria;?></td>
-                                            <td class="text-right">
+                                            <td class="text-center">
+                                                <?php if($sult->evstatus == 1): ?>
                                                 <input type="hidden" name="kriteria[]" value="<?=$sult->id_criteria;?>">
                                                 <input type="number" class="form-control" name="nilai[]" value="<?=$sult->value;?>" min="1" max="5" required>
+                                                <?php elseif($sult->evstatus == 2): ?>
+                                                <?=$sult->value;?>
+                                                <?php endif; ?>
                                             </td>
                                         </tr>
                                         <?php endforeach?>

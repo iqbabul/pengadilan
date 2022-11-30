@@ -5,23 +5,30 @@ class Model_alternatif extends CI_Model{
 	public $event = "saw_event";	
 	public $tabel = "saw_alternatives";	
 
-	public function getAllAdm(){
+	public function getAllAdm($id){
 		$this->db->select('*');
-		$this->db->from($this->tabel); 
-		return $this->db->get();		
+		$this->db->from($this->tabel.' a');
+		$this->db->where('a.id_event', $id);
+		$this->db->group_by('a.id_alternative');
+		return $this->db->get();	
 	}
 
-	public function getAll(){
+	public function getAll($id){
 		$this->db->select('*');
-		$this->db->from($this->tabel.' a'); 
-		$this->db->join($this->event.' e', 'a.id_event = e.id_event', 'left');
-		$this->db->where('e.status','1');
-		$this->db->where('a.status','1');
-		return $this->db->get();		
+		$this->db->from($this->tabel.' a');
+		$this->db->where('a.id_event', $id);
+		$this->db->where('a.status', '1');
+		$this->db->group_by('a.id_alternative');
+		return $this->db->get();	
 	}
 
 	public function getById($id){
 		return $this->db->get_where($this->tabel,array('id_alternative' => $id)); 		
+
+	}
+
+	public function getByEvent($id){
+		return $this->db->get_where($this->tabel,array('id_event' => $id)); 		
 
 	}
 

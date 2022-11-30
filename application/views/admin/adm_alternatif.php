@@ -1,12 +1,31 @@
 <!-- Begin Page Content -->
 <div class="container-fluid">
     <!-- Page Heading -->
-    <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800">Usulan Pegawai</h1>
+    <div class="d-sm-flex mb-4">
+      <form action="<?=base_url('admin/data/alternatif')?>" method="post">
+        <select class="form-control" name="event" onchange="this.form.submit()">
+        <option value="">- Pilih -</option>
+          <?php foreach($event as $ev):?>
+          <?php if($ev->id_event == $eventid->id_event):?>
+          <option value="<?=$ev->id_event;?>" selected><?=$ev->title?><?= $ev->status == 1 ? " (<span class='text-success'>Aktif</span>)" : " (<span class='text-success'>Selesai</span>)"; ?></option>
+          <?php else:?>
+          <option value="<?=$ev->id_event;?>"><?=$ev->title?><?= $ev->status == 1 ? " (<span class='text-success'>Aktif</span>)" : " (<span class='text-success'>Selesai</span>)"; ?></option>
+          <?php endif?>
+          <?php endforeach; ?>
+        </select>
+      </form>
+    </div>
+    <div class="row mb-4">
+      <div class="col-6"><h1 class="h3 mb-0 text-gray-800">Usulan Pegawai</h1></div>
+      <div class="col-6 text-right">
+      <?php if($eventid->status == 1): ?>
+        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm" data-toggle="modal" data-target="#exampleModal1">Impor Data</a>        
         <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm" data-toggle="modal" data-target="#exampleModal">Tambah Kandidat</a>        
+        <?php elseif($eventid->status == 2): ?>
+      <?php endif ?>
+      </div>
     </div>
     <div class="flash-data" data-flashdata="<?=$this->session->flashdata('alert');?>"></div>      
-
     <!-- Content Row -->
     <div class="row">
         <?php $no=1; foreach($alternatif as $row): ?>
@@ -63,6 +82,36 @@
         <div class="modal-footer">
           <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Close</button>
           <button type="submit" class="btn btn-sm btn-success">Simpan</button>
+        </div>
+      </form>      
+    </div>
+  </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="exampleModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Impor Data</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form method="post" action="<?=base_url('admin/data/impor_alternatif')?> ">
+        <div class="modal-body">        
+          <div class="form-group">
+            <label for="exampleInputEmail1">Acara</label>
+            <select class="form-control" name="event"">
+              <option value="">- Pilih -</option>
+                <?php foreach($event as $ev):?>
+                <option value="<?=$ev->id_event;?>"><?=$ev->title?><?= $ev->status == 1 ? " (<span class='text-success'>Aktif</span>)" : " (<span class='text-success'>Selesai</span>)"; ?></option>
+                <?php endforeach; ?>
+            </select>
+            <input type="hidden" name="ev" value="<?=$eventid->id_event?>">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-sm btn-danger">Impor</button>
         </div>
       </form>      
     </div>

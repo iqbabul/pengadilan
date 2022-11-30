@@ -1,6 +1,21 @@
-<!-- Begin Page Content -->
+<!-- Begin Page Content -->        
+
 <div class="container-fluid">
     <!-- Page Heading -->
+    <div class="d-sm-flex mb-4">
+      <form action="<?=base_url('admin/data/kriteria')?>" method="post">
+        <select class="form-control" name="event" onchange="this.form.submit()">
+        <option value="">- Pilih -</option>
+          <?php foreach($event as $ev):?>
+          <?php if($ev->id_event == $eventid->id_event):?>
+            <option value="<?=$ev->id_event;?>" selected><?=$ev->title?><?= $ev->status == 1 ? " (<span class='text-success'>Aktif</span>)" : " (<span class='text-success'>Selesai</span>)"; ?></option>
+          <?php else:?>
+          <option value="<?=$ev->id_event;?>"><?=$ev->title?><?= $ev->status == 1 ? " (<span class='text-success'>Aktif</span>)" : " (<span class='text-success'>Selesai</span>)"; ?></option>
+          <?php endif?>
+          <?php endforeach; ?>
+        </select>
+      </form>
+    </div>
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-gray-800">Kriteria</h1>
         <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm" data-toggle="modal" data-target="#exampleModal">Tambah Kriteria</a>        
@@ -22,9 +37,9 @@
                             <thead>
                                 <tr>
                                     <th>No</th>
-                                    <th>Kriteria</th>
-                                    <th>Bobot</th>
+                                    <th colspan="2">Kriteria</th>
                                     <th>Atribut</th>
+                                    <th class="text-center">Bobot (%)</th>
                                     <th colspan="2" class="text-center">Aksi</th>
                                 </tr>
                             </thead>
@@ -32,9 +47,10 @@
                                 <?php $jml=0; $no=1; foreach($kriteria as $row): ?>
                                 <tr>
                                     <td><?=$no++;?></td>
+                                    <td>(<?=$row->alias;?>)</td>
                                     <td><?=$row->criteria;?></td>
-                                    <td class="text-center"><?=number_format($row->weight,2, '.', '');?></td>
                                     <td><?=$row->attribute;?></td>
+                                    <td class="text-center"><?=$row->weight;?></td>
                                     <td>
                                     <button class="btn btn-sm btn-circle btn-primary"><i class="fas fa-edit"></i></button>
                                     </td>
@@ -44,15 +60,15 @@
                                 </tr>
                                 <?php $jml+=$row->weight; endforeach; ?>
                                 <tr>
-                                  <td colspan="2" class="text-center">Jumlah</td>
-                                  <td class="text-center"><?=number_format($jml,2, '.', '');?></td>
-                                  <td colspan="3"></td>
+                                  <td colspan="4" class="text-center">Jumlah</td>
+                                  <td class="text-center"><?=$jml;?></td>
+                                  <td colspan="2"></td>
                                 </tr>
                             </tbody>
                         </table>
-                        <?php if($jml != 1):?>
+                        <?php if($jml != 100):?>
                           <div class="alert alert-danger" role="alert">
-                          <i class="fas fa-exclamation-triangle"></i> Jumlah Bobot Harus 1
+                          <i class="fas fa-exclamation-triangle"></i> Jumlah Bobot Harus 100
                         </div>
                         <?php else: ?>
                           <div class="alert alert-success" role="alert">
@@ -83,6 +99,11 @@
           <div class="form-group">
             <label for="exampleInputEmail1">Kriteria</label>
             <input type="text" name="kriteria" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label for="exampleInputEmail1">Alias</label>
+            <input type="text" name="alias" class="form-control" required>
+            <input type="hidden" name="idevent" value="<?=$eventid->id_event;?>" class="form-control" required>
           </div>
           <div class="form-group">
             <label for="exampleInputPassword1">Nilai</label>

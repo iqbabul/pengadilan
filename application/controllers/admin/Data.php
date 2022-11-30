@@ -8,16 +8,21 @@ class Data extends CI_Controller {
 			redirect(base_url("login"));
 		}
 		$this->load->model('Model_user');
+		$this->load->model('Model_event');
 		$this->load->model('Model_alternatif');
 		$this->load->model('Model_kriteria');
     }
+
 	public function alternatif()
 	{
 		$login = $this->session->userdata('nama');
 		$data['user'] = $this->Model_user->getLogin($login)->row();
 		$id_user = $data['user']->id_user;
+		$idevent = empty($this->input->post('event')) ? $this->event_on() : $this->input->post('event');
+		$data['event'] = $this->Model_event->getAll()->result();
+		$data['eventid'] = $this->Model_event->getById($idevent)->row();
 		if($data['user']->id_access == 1){
-			$data['alternatif'] = $this->Model_alternatif->getAllAdm()->result();
+			$data['alternatif'] = $this->Model_alternatif->getAllAdm($idevent)->result();
 			$this->load->view('layout/header',$data);
 			$this->load->view('admin/adm_alternatif',$data);
 		}else{
@@ -28,15 +33,25 @@ class Data extends CI_Controller {
 		$this->load->view('layout/footer');
 	}
 
+	public function event_on(){
+		$data['event'] = $this->Model_event->getByStatus()->row();
+		return $data['event']->id_event;
+	}
+
 	public function kriteria(){
+		$idevent = empty($this->input->post('event')) ? $this->event_on() : $this->input->post('event');
+		//echo $idevent;
 		$login = $this->session->userdata('nama');
 		$data['user'] = $this->Model_user->getLogin($login)->row();
 		$id_user = $data['user']->id_user;
-		$data['kriteria'] = $this->Model_kriteria->getAll()->result();
+		$data['event'] = $this->Model_event->getAll()->result();
+		$data['eventid'] = $this->Model_event->getById($idevent)->row();
 		$this->load->view('layout/header',$data);
 		if($data['user']->id_access == 1){
+			$data['kriteria'] = $this->Model_kriteria->getAllAdm($idevent)->result();
 			$this->load->view('admin/adm_kriteria',$data);
 		}else{
+			$data['kriteria'] = $this->Model_kriteria->getAll($idevent)->result();
 			$this->load->view('admin/kriteria',$data);
 		}
 		$this->load->view('layout/footer');
@@ -74,6 +89,8 @@ class Data extends CI_Controller {
 	public function simpan_kriteria(){
 		print_r($this->input->post());
 		$data = array(
+			'id_event' => $this->input->post('idevent'),
+			'alias' => $this->input->post('alias'),
 			'criteria' => $this->input->post('kriteria'),
 			'weight' => $this->input->post('nilai'),
 			'attribute' => $this->input->post('atribut'),
@@ -88,6 +105,22 @@ class Data extends CI_Controller {
 		$this->Model_alternatif->status_alternatif($id, $data);
 		$alert = $this->input->post('status') == '1' ? "diaktifkan" : "dipasifkan";
 		$this->session->set_flashdata('alert', $alert);
+		redirect(base_url('admin/data/alternatif'));
+	}
+
+	public function impor_alternatif(){
+		$data['alternatif'] = $this->Model_alternatif->getByEvent($this->input->post('event'))->result();
+		foreach($data['alternatif'] as $alternatif){
+			// echo $alternatif->name;
+			$impor = array(
+				'id_event' => $this->input->post('ev'),
+				'name' => $alternatif->name,
+				'jabatan' => $alternatif->jabatan,
+				'photo' => $alternatif->photo,
+				'status' => $alternatif->status
+			);
+			$this->Model_alternatif->insert($impor);
+		}
 		redirect(base_url('admin/data/alternatif'));
 	}
 

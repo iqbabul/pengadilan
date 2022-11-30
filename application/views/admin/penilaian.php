@@ -33,7 +33,7 @@
                                         <tr>
                                             <td><?=$no++;?></td>
                                             <td>(<?=$sult->alias;?>)</td>
-                                            <td>(<?=$sult->criteria;?>)</td>
+                                            <td><?=$sult->criteria;?></td>
                                             <td class="text-right">
                                                 <input type="hidden" name="kriteria[]" value="<?=$sult->id_criteria;?>">
                                                 <input type="number" class="form-control" name="nilai[]" min="1" max="5" required>
@@ -41,7 +41,7 @@
                                         </tr>
                                         <?php endforeach?>
                                         <tr>
-                                            <td colspan="3"></td>
+                                            <td colspan="3"><input type="hidden" name="idv" value="<?=$eventid;?>"></td>
                                             <td><button type="submit" class="btn btn-sm btn-success">Simpan</button></td>
                                         </tr>
                                     </tbody>

@@ -1,6 +1,21 @@
 <!-- Begin Page Content -->
 <div class="container-fluid">
     <!-- Page Heading -->
+    <!-- Page Heading -->
+    <div class="d-sm-flex mb-4">
+      <form action="<?=base_url('admin/matriks')?>" method="post">
+        <select class="form-control" name="event" onchange="this.form.submit()">
+        <option value="">- Pilih -</option>
+          <?php foreach($event as $ev):?>
+          <?php if($ev->id_event == $eventid->id_event):?>
+          <option value="<?=$ev->id_event;?>" selected><?=$ev->title?><?= $ev->status == 1 ? " (<span class='text-success'>Aktif</span>)" : " (<span class='text-success'>Selesai</span>)"; ?></option>
+          <?php else:?>
+          <option value="<?=$ev->id_event;?>"><?=$ev->title?><?= $ev->status == 1 ? " (<span class='text-success'>Aktif</span>)" : " (<span class='text-success'>Selesai</span>)"; ?></option>
+          <?php endif?>
+          <?php endforeach; ?>
+        </select>
+      </form>
+    </div>
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-gray-800">Matriks</h1>
     </div>
@@ -28,9 +43,10 @@
                                 <tr>
                                     <td><?=$al->name;?></td>
                                     <?php 
+                                    $ev = $eventid->id_event;
                                     $us = $user->id_user; 
                                     $alter = $al->id_alternative; 
-                                    $nilai = $this->db->query("SELECT * FROM saw_evaluations WHERE id_alternative = '$alter' AND id_user = '$us'")->result();?>
+                                    $nilai = $this->db->query("SELECT * FROM saw_evaluations WHERE id_event = '$ev' AND id_alternative = '$alter' AND id_user = '$us' ORDER BY id_criteria ASC")->result();?>
                                     <?php foreach($nilai as $n): ?>
                                     <td class="text-center"><?=$n->value;?></td>
                                     <?php endforeach;?>
@@ -45,7 +61,7 @@
         <div class="col-12">    
             <div class="card shadow mb-4">
                 <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-success">Matriks Ternomalisasi</h6>
+                <h6 class="m-0 font-weight-bold text-success">Matriks Nomalisasi</h6>
                 </div>
                 <div class="card-content">
                     <div class="card-body">
@@ -66,7 +82,7 @@
                                         <?php 
                                             $us = $user->id_user; 
                                             $alter = $al->id_alternative; 
-                                            $nilai = $this->db->query("SELECT value as nilai FROM saw_evaluations WHERE id_alternative = '$alter' AND id_user = '$us'")->result_array();                                        
+                                            $nilai = $this->db->query("SELECT value as nilai FROM saw_evaluations WHERE id_event = '$ev' AND id_alternative = '$alter' AND id_user = '$us' ORDER BY id_criteria ASC")->result_array();                                        
                                             $item = array();
                                             foreach($nilai as $i => $nil) {
                                                 $item[]=$nil;

@@ -66,9 +66,10 @@
                     <i class="fas fa-fw fa-cog"></i>
                     <span>Pengaturan</span>
                 </a>
-                <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+                <div id="collapsePages" class="collapse <?php if($p=='setting') echo 'show' ?>" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" href="<?=base_url('admin/setting/user')?>">Pengguna</a>
+                        <a class="collapse-item <?php if($s=='umum') echo 'active' ?>" href="<?=base_url('admin/setting/umum')?>">Umum</a>
+                        <a class="collapse-item <?php if($s=='user') echo 'active' ?>" href="<?=base_url('admin/setting/user')?>">Pengguna</a>
                     </div>
                 </div>
             </li>
