@@ -53,10 +53,15 @@
                     <i class="fa fa-fw fa-table"></i>
                     <span>Matriks</span></a>
             </li>
-            <li class="nav-item <?php if($p=='hasil') echo 'active' ?>">
-                <a class="nav-link" href="<?=base_url('admin/hasil')?>">
+            <li class="nav-item <?php if($p=='ranking') echo 'active' ?>">
+                <a class="nav-link" href="<?=base_url('admin/ranking')?>">
                     <i class="fas fa-fw fa-file-alt"></i>
                     <span>Perangkingan</span></a>
+            </li>
+            <li class="nav-item <?php if($p=='hasil') echo 'active' ?>">
+                <a class="nav-link" href="<?=base_url('admin/hasil')?>">
+                    <i class="fas fa-fw fa-chart-bar"></i>
+                    <span>Hasil</span></a>
             </li>
             <?php if($user->id_access == 1){ ?>
             <!-- Nav Item - Pages Collapse Menu -->
