@@ -34,13 +34,11 @@
                                         <th rowspan="2" class="align-middle text-center">Alternatif</th>
                                         <th colspan="<?=$jmlc?>" class="text-center">Penilai</th>
                                         <th crowspan="2" class="text-center">Jumlah</th>
-                                        <th crowspan="2" class="text-center">Peringkat</th>
                                     </tr>
                                     <tr class="text-center font-weight-bold">
                                         <?php foreach($kriteria as $c):?>
                                         <td><?=$c->alias;?></td>
                                         <?php endforeach;?>
-                                        <td></td>
                                         <td></td>
                                     </tr>
                                     <?php foreach($alternatif as $al): ?>
@@ -57,6 +55,7 @@
                                             }
                                             $x=0;
                                             $last = 0;
+                                            //$rank = array();
                                             foreach($kriteria as $c){
                                                 $idc = $c->id_criteria;
                                                 if($c->attribute == "benefit"){
@@ -70,13 +69,27 @@
                                                 }
                                                 $last += ($score * ($c->weight/100));
                                             }
-
+                                            $rank[] = $last;
                                             echo "<td class='text-center'>".number_format($last, 2, '.', '')."</td>";
-                                            echo "<td class='text-center'>".number_format($last, 2, '.', '')."</td>";
+                                            //echo "<td class='text-center'>".ranking($rank)."</td>";
                                         ?>
                                     </tr>
                                     <?php endforeach; ?>
                                 </table>
+                                <?php 
+                                    //print_r($rank);
+                                   // $urut = array($a => 'ani', $b => 'budi', $c => 'joe', $d => 'sasa');
+                                    rsort($rank);
+                                    $i = 1;
+                                    foreach($rank as $n => $nilai){
+                                        if($i == 1){
+                                            echo "<strong>Ranking ".$i." : ".number_format($nilai, 2, '.', '')."</strong><br/>";
+                                        }else{
+                                            echo "Ranking ".$i." : ".number_format($nilai, 2, '.', '')."<br/>";
+                                        }
+                                        $i++;
+                                    }                                
+                                ?>
                             </div>                    
                         </div>
                 </div>
@@ -85,3 +98,18 @@
     </div>
 </div>
 <!-- /.container-fluid -->
+<?php
+function ranking($ranking){
+    $ordered_values = $ranking;
+    rsort($ordered_values);
+    foreach ($ranking as $key => $value) {
+        foreach ($ordered_values as $ordered_key => $ordered_value) {
+        if ($value === $ordered_value) {
+            $key = $ordered_key;
+            break;
+        }
+    }
+        echo ((int) $key + 1);
+    }
+}
+?>
