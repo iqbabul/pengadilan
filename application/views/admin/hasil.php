@@ -98,18 +98,3 @@
     </div>
 </div>
 <!-- /.container-fluid -->
-<?php
-function ranking($ranking){
-    $ordered_values = $ranking;
-    rsort($ordered_values);
-    foreach ($ranking as $key => $value) {
-        foreach ($ordered_values as $ordered_key => $ordered_value) {
-        if ($value === $ordered_value) {
-            $key = $ordered_key;
-            break;
-        }
-    }
-        echo ((int) $key + 1);
-    }
-}
-?>
