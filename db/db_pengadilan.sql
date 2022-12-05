@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 30 Nov 2022 pada 13.00
+-- Waktu pembuatan: 05 Des 2022 pada 02.53
 -- Versi server: 10.1.38-MariaDB
 -- Versi PHP: 5.6.40
 
@@ -264,7 +264,8 @@ CREATE TABLE `saw_event` (
 
 INSERT INTO `saw_event` (`id_event`, `title`, `status`) VALUES
 (1, 'Pegawai Terbaik Tahun 2021', '2'),
-(2, 'Pegawai Terbaik Tahun 2022', '1');
+(2, 'Pegawai Terbaik Tahun 2022', '1'),
+(3, 'Pegawai Tahun 2023', '0');
 
 -- --------------------------------------------------------
 
@@ -393,7 +394,7 @@ ALTER TABLE `saw_evaluations`
 -- AUTO_INCREMENT untuk tabel `saw_event`
 --
 ALTER TABLE `saw_event`
-  MODIFY `id_event` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_event` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT untuk tabel `saw_score`
