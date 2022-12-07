@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 05 Des 2022 pada 02.53
+-- Waktu pembuatan: 07 Des 2022 pada 17.12
 -- Versi server: 10.1.38-MariaDB
 -- Versi PHP: 5.6.40
 
@@ -270,6 +270,48 @@ INSERT INTO `saw_event` (`id_event`, `title`, `status`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Struktur dari tabel `saw_result`
+--
+
+CREATE TABLE `saw_result` (
+  `id_result` int(11) NOT NULL,
+  `id_event` int(11) NOT NULL,
+  `id_user` int(11) NOT NULL,
+  `id_alternative` int(11) NOT NULL,
+  `score` float NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data untuk tabel `saw_result`
+--
+
+INSERT INTO `saw_result` (`id_result`, `id_event`, `id_user`, `id_alternative`, `score`) VALUES
+(1, 2, 2, 18, 1),
+(2, 2, 2, 19, 0.71),
+(3, 2, 2, 20, 0.66),
+(4, 2, 2, 21, 0.23),
+(5, 2, 3, 18, 1),
+(6, 2, 3, 19, 0.77),
+(7, 2, 3, 20, 0.573333),
+(8, 2, 3, 21, 0.385),
+(9, 1, 2, 9, 0.9),
+(10, 1, 2, 10, 0.8125),
+(11, 1, 2, 11, 0.8125),
+(12, 1, 2, 12, 0.8625),
+(13, 1, 2, 17, 0.8125),
+(14, 1, 3, 9, 0.9125),
+(15, 1, 3, 10, 0.6375),
+(16, 1, 3, 11, 0.7875),
+(17, 1, 3, 12, 0.7),
+(18, 1, 3, 17, 0.6125),
+(19, 2, 1, 18, 0),
+(20, 2, 1, 19, 0),
+(21, 2, 1, 20, 0),
+(22, 2, 1, 21, 0);
+
+-- --------------------------------------------------------
+
+--
 -- Struktur dari tabel `saw_score`
 --
 
@@ -350,6 +392,12 @@ ALTER TABLE `saw_event`
   ADD PRIMARY KEY (`id_event`);
 
 --
+-- Indeks untuk tabel `saw_result`
+--
+ALTER TABLE `saw_result`
+  ADD PRIMARY KEY (`id_result`);
+
+--
 -- Indeks untuk tabel `saw_score`
 --
 ALTER TABLE `saw_score`
@@ -395,6 +443,12 @@ ALTER TABLE `saw_evaluations`
 --
 ALTER TABLE `saw_event`
   MODIFY `id_event` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT untuk tabel `saw_result`
+--
+ALTER TABLE `saw_result`
+  MODIFY `id_result` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT untuk tabel `saw_score`
