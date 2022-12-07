@@ -72,25 +72,45 @@
                                             $rank[] = $last;
                                             echo "<td class='text-center'>".number_format($last, 2, '.', '')."</td>";
                                             //echo "<td class='text-center'>".ranking($rank)."</td>";
+                                            $data = array(
+                                                'id_event' => $ev,
+                                                'id_alternative' => $alter,
+                                                'id_user' => $us,
+                                                'score' => $last
+                                            );
+                                            $result = $this->db->query("SELECT * FROM saw_result WHERE id_event = '$ev' AND id_alternative = '$alter' AND id_user = '$us'")->num_rows();
+                                            if($result <= 0){
+                                                $this->db->insert('saw_result', $data);
+                                            }
                                         ?>
                                     </tr>
                                     <?php endforeach; ?>
                                 </table>
-                                <?php 
-                                    //print_r($rank);
-                                   // $urut = array($a => 'ani', $b => 'budi', $c => 'joe', $d => 'sasa');
-                                    rsort($rank);
-                                    $i = 1;
-                                    foreach($rank as $n => $nilai){
-                                        if($i == 1){
-                                            echo "<strong>Ranking ".$i." : ".number_format($nilai, 2, '.', '')."</strong><br/>";
-                                        }else{
-                                            echo "Ranking ".$i." : ".number_format($nilai, 2, '.', '')."<br/>";
+                            </div>  
+                            <div class="row">
+                                <div class="col-lg-3"></div>
+                                <div class="col-lg-6">
+                                <table class="table table-bordered" width="30%" cellspacing="0">
+                                    <tr class="text-center">
+                                        <th width="1%">Peringkat</th>
+                                        <th>Nama</th>
+                                        <th>Nilai</th>
+                                    </tr>
+                                    <?php
+                                        $urut=1;$sult = $this->db->query("SELECT * FROM saw_result r LEFT JOIN saw_alternatives a ON a.id_alternative = r.id_alternative WHERE r.id_event = '$ev' AND r.id_user = '$us' ORDER BY score DESC")->result();
+                                        foreach($sult as $hasil){
+                                            echo "<tr>";
+                                            echo "<td class='text-center'>".$urut++."</td>";
+                                            echo "<td>".$hasil->name."</td>";
+                                            echo "<td class='text-center'>".number_format($hasil->score, 2, '.', '')."</td>";
+                                            echo "</tr>";
                                         }
-                                        $i++;
-                                    }                                
-                                ?>
-                            </div>                    
+                                    ?>                                
+                                    </table>
+
+                                </div>                  
+
+                                </div>
                         </div>
                 </div>
             </div>

@@ -27,7 +27,7 @@
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Dashboard</span></a>
             </li>
-            <?php if($user->id_access == 1){ ?>
+            <?php if($user->id_access == 1): ?>
             <!-- Nav Item - Pages Collapse Menu -->
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
@@ -42,7 +42,7 @@
                     </div>
                 </div>
             </li>
-            <?php } ?>
+            <?php elseif($user->id_access == 2): ?>
             <li class="nav-item <?php if($p=='penilaian') echo 'active' ?>">
                 <a class="nav-link" href="<?=base_url('admin/penilaian')?>">
                     <i class="fas fa-fw fa-square-root-alt"></i>
@@ -58,6 +58,7 @@
                     <i class="fas fa-fw fa-file-alt"></i>
                     <span>Perangkingan</span></a>
             </li>
+            <?php endif; ?>
             <li class="nav-item <?php if($p=='hasil') echo 'active' ?>">
                 <a class="nav-link" href="<?=base_url('admin/hasil')?>">
                     <i class="fas fa-fw fa-chart-bar"></i>
