@@ -7,21 +7,36 @@
         <option value="">- Pilih -</option>
           <?php foreach($event as $ev):?>
           <?php if($ev->id_event == $eventid->id_event):?>
-          <option value="<?=$ev->id_event;?>" selected><?=$ev->title?><?= $ev->status == 1 ? " (<span class='text-success'>Aktif</span>)" : " (<span class='text-success'>Selesai</span>)"; ?></option>
+          <option value="<?=$ev->id_event;?>" selected>
+          <?=$ev->title?>
+          <?php if($ev->status == 0): ?>
+          (<span class='text-success'>Tidak Aktif</span>)
+          <?php elseif($ev->status == 1):?> 
+          (<span class='text-success'>Aktif</span>)
+          <?php elseif($ev->status == 2):?> 
+          (<span class='text-success'>Selesai</span>)
+          <?php endif ?> 
+          </option>
           <?php else:?>
-          <option value="<?=$ev->id_event;?>"><?=$ev->title?><?= $ev->status == 1 ? " (<span class='text-success'>Aktif</span>)" : " (<span class='text-success'>Selesai</span>)"; ?></option>
+          <option value="<?=$ev->id_event;?>"><?=$ev->title?>
+          <?php if($ev->status == 0): ?>
+          (<span class='text-success'>Tidak Aktif</span>)
+          <?php elseif($ev->status == 1):?> 
+          (<span class='text-success'>Aktif</span>)
+          <?php elseif($ev->status == 2):?> 
+          (<span class='text-success'>Selesai</span>)
+          <?php endif ?> 
+          </option>
           <?php endif?>
           <?php endforeach; ?>
         </select>
       </form>
     </div>
     <div class="row mb-4">
-      <div class="col-6"><h1 class="h3 mb-0 text-gray-800">Usulan Pegawai</h1></div>
-      <div class="col-6 text-right">
-      <?php if($eventid->status == 1): ?>
+      <div class="col-6">
+      <?php if($eventid->status == 0): ?>
         <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm" data-toggle="modal" data-target="#exampleModal1">Impor Data</a>        
         <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm" data-toggle="modal" data-target="#exampleModal">Tambah Kandidat</a>        
-        <?php elseif($eventid->status == 2): ?>
       <?php endif ?>
       </div>
     </div>
@@ -35,6 +50,7 @@
                 <div class="card-body">
                     <h5 class="card-title"><?=$row->name;?></h5>
                     <p class="card-text"><?=$row->jabatan;?></p><hr>
+                    <?php if($eventid->status != 2): ?>
                     <form action="<?=base_url('admin/data/status_alternatif')?>" method="post">
                       <?php if($row->status == 1):?>
                       <input type="hidden" name="status" value="0">
@@ -44,9 +60,12 @@
                       <button type="submit" class="btn btn-sm btn-circle btn-danger" title="Aktifkan"><i class="fas fa-times"></i></button>
                       <?php endif?>
                       <button class="btn btn-sm btn-circle btn-primary"><i class="fas fa-edit"></i></button>
+                      <?php if($eventid->status == 0): ?>
                       <a href="<?=base_url();?>admin/data/hapus_alternatif/<?=$row->id_alternative;?>" class="btn btn-sm btn-circle btn-danger tombol-hapus"><i class="fas fa-trash"></i></a>
+                      <?php endif; ?>
                       <input type="hidden" name="id" value="<?=$row->id_alternative;?>">
                     </form>
+                    <?php endif ?>
                 </div>
             </div>
         </div>
@@ -103,7 +122,7 @@
             <label for="exampleInputEmail1">Acara</label>
             <select class="form-control" name="event"">
               <option value="">- Pilih -</option>
-                <?php foreach($event as $ev):?>
+                <?php foreach($eventD as $ev):?>
                 <option value="<?=$ev->id_event;?>"><?=$ev->title?><?= $ev->status == 1 ? " (<span class='text-success'>Aktif</span>)" : " (<span class='text-success'>Selesai</span>)"; ?></option>
                 <?php endforeach; ?>
             </select>
@@ -138,7 +157,7 @@
         text: "Apakah ingin menghapus data ini?",
           icon: 'warning',
           showCancelButton: true,
-          confirmButtonColor: '#25c904',
+          confirmButtonColor: '#3085d6',
           cancelButtonColor: '#d33',
           confirmButtonText: 'Ya, hapus!'
       }).then((result) => {

@@ -15,16 +15,20 @@ class Model_user extends CI_Model{
 		return $this->db->get(); 		
 	}	
 
-	public function getAll(){
+	public function getAllPenilai(){
 		$this->db->select('*');
 		$this->db->from($this->tabel);
-		$this->db->join('tb_hak_akses', 'tb_hak_akses.id_hak = '.$this->tabel.'.id_hak', 'left');
+		$this->db->join('saw_access', 'saw_access.id_access = '.$this->tabel.'.id_access', 'left');
+		$this->db->where('saw_access.id_access','2');
 		$this->db->order_by('fullname','ASC');
 		return $this->db->get(); 		
 	}
 
-	public function getHakAkses(){
-		return $this->db->get('tb_hak_akses'); 				
+	public function getAccess(){
+		$this->db->select('*');
+		$this->db->from('saw_access');
+		$this->db->where('id_access','2');
+		return $this->db->get(); 		
 	}
 
 	public function getById($id){

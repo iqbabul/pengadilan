@@ -1,3 +1,6 @@
+<?php
+  error_reporting(0);
+?>
 <!-- Begin Page Content -->
 <div class="container-fluid">
     <!-- Page Heading -->
@@ -15,9 +18,6 @@
           <?php endforeach; ?>
         </select>
       </form>
-    </div>
-    <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800">Matriks</h1>
     </div>
     <!-- Content Row -->
     <div class="row">

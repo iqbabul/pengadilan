@@ -13,9 +13,10 @@
                     <div class="alert alert-primary" role="alert">
                         <h4>Petunjuk Pengisian</h4>
                         <ol>
-                            <li>Berikanlah Nilai/Bobot : dari angka 1 s/d 5</li>
-                            <li>Nilai 1 : <strong>Sangat Tidak Berpengaruh</strong></li>
-                            <li>Nilai 5 : <strong>Sangat Berpengaruh</strong></li>
+                            <li>Berikanlah Nilai/Bobot : dari angka <?=$min->min;?> s/d <?=$max->max;?></li>
+                            <?php foreach($score as $sc): ?>
+                            <li>Nilai <?=$sc->score;?> : <strong><?=$sc->ket;?></strong></li>
+                            <?php endforeach ?>
                         </ol>
                     </div>
                         <form action="<?=base_url('admin/penilaian/simpan')?>" method="post">
@@ -36,7 +37,7 @@
                                             <td><?=$sult->criteria;?></td>
                                             <td class="text-right">
                                                 <input type="hidden" name="kriteria[]" value="<?=$sult->id_criteria;?>">
-                                                <input type="number" class="form-control" name="nilai[]" min="1" max="5" required>
+                                                <input type="number" class="form-control" name="nilai[]" min="<?=$min->min;?>" max="<?=$max->max;?>" required>
                                             </td>
                                         </tr>
                                         <?php endforeach?>

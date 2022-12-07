@@ -19,13 +19,15 @@ class Data extends CI_Controller {
 		$data['user'] = $this->Model_user->getLogin($login)->row();
 		$id_user = $data['user']->id_user;
 		$idevent = empty($this->input->post('event')) ? $this->event_on() : $this->input->post('event');
-		$data['event'] = $this->Model_event->getAll()->result();
+		$data['eventD'] = $this->Model_event->getDone()->result();
 		$data['eventid'] = $this->Model_event->getById($idevent)->row();
 		if($data['user']->id_access == 1){
+			$data['event'] = $this->Model_event->getAllAdm()->result();
 			$data['alternatif'] = $this->Model_alternatif->getAllAdm($idevent)->result();
 			$this->load->view('layout/header',$data);
 			$this->load->view('admin/adm_alternatif',$data);
 		}else{
+			$data['event'] = $this->Model_event->getAll()->result();
 			$data['alternatif'] = $this->Model_alternatif->getAll()->result();
 			$this->load->view('layout/header',$data);
 			$this->load->view('admin/alternatif',$data);
@@ -34,7 +36,13 @@ class Data extends CI_Controller {
 	}
 
     public function event_on(){
-		$data['event'] = $this->Model_event->getMaxID()->row();
+		$login = $this->session->userdata('nama');
+		$data['user'] = $this->Model_user->getLogin($login)->row();
+		if($data['user']->id_access == 1){
+			$data['event'] = $this->Model_event->getMaxIDAdm()->row();
+		}else{
+			$data['event'] = $this->Model_event->getMaxID()->row();
+		}
 		return $data['event']->id_event;
 	}
 
@@ -46,11 +54,14 @@ class Data extends CI_Controller {
 		$id_user = $data['user']->id_user;
 		$data['event'] = $this->Model_event->getAll()->result();
 		$data['eventid'] = $this->Model_event->getById($idevent)->row();
+		$data['eventD'] = $this->Model_event->getDone()->result();
 		$this->load->view('layout/header',$data);
 		if($data['user']->id_access == 1){
+			$data['event'] = $this->Model_event->getAllAdm()->result();
 			$data['kriteria'] = $this->Model_kriteria->getAllAdm($idevent)->result();
 			$this->load->view('admin/adm_kriteria',$data);
 		}else{
+			$data['event'] = $this->Model_event->getAll()->result();
 			$data['kriteria'] = $this->Model_kriteria->getAll($idevent)->result();
 			$this->load->view('admin/kriteria',$data);
 		}

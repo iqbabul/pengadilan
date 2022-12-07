@@ -12,6 +12,7 @@ class Penilaian extends CI_Controller {
 		$this->load->model('Model_alternatif');
 		$this->load->model('Model_penilaian');
 		$this->load->model('Model_kriteria');
+		$this->load->model('Model_score');
     }
 
     public function event_on(){
@@ -41,6 +42,9 @@ class Penilaian extends CI_Controller {
 		$data['alternatif'] = $this->Model_alternatif->getById($this->input->post('id'))->row();
 		$data['kriteria'] = $this->Model_kriteria->getAll($idevent)->result();
 		$data['eventid'] = $this->input->post('idv');
+		$data['max'] = $this->Model_score->getMax()->row();
+		$data['min'] = $this->Model_score->getMin()->row();
+		$data['score'] = $this->Model_score->getAll()->result();
 		$this->load->view('layout/header',$data);
 		$this->load->view('admin/penilaian',$data);
 		$this->load->view('layout/footer');

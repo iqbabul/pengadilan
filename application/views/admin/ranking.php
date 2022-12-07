@@ -1,3 +1,6 @@
+<?php
+  error_reporting(0);
+?>
 <!-- Begin Page Content -->
 <div class="container-fluid">
     <!-- Page Heading -->
@@ -15,9 +18,6 @@
           <?php endforeach; ?>
         </select>
       </form>
-    </div>
-    <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800">Perangkingan</h1>
     </div>
     <!-- Content Row -->
     <div class="row">
@@ -97,13 +97,14 @@
                                         <th>Nilai</th>
                                     </tr>
                                     <?php
-                                        $urut=1;$sult = $this->db->query("SELECT * FROM saw_result r LEFT JOIN saw_alternatives a ON a.id_alternative = r.id_alternative WHERE r.id_event = '$ev' AND r.id_user = '$us' ORDER BY score DESC")->result();
+                                        $urut=1;
+                                        $sult = $this->db->query("SELECT * FROM saw_result r LEFT JOIN saw_alternatives a ON a.id_alternative = r.id_alternative WHERE r.id_event = '$ev' AND r.id_user = '$us' ORDER BY score DESC")->result_array();
                                         foreach($sult as $hasil){
                                             echo "<tr>";
                                             echo "<td class='text-center'>".$urut++."</td>";
-                                            echo "<td>".$hasil->name."</td>";
-                                            echo "<td class='text-center'>".number_format($hasil->score, 2, '.', '')."</td>";
-                                            echo "</tr>";
+                                            echo "<td>".$hasil['name']."</td>";
+                                            echo "<td class='text-center'>".number_format($hasil['score'], 2, '.', '')."</td>";
+                                            echo "</tr>";    
                                         }
                                     ?>                                
                                     </table>

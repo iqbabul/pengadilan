@@ -1,3 +1,6 @@
+<?php
+  error_reporting(0);
+?>
 <!-- Begin Page Content -->
 <div class="container-fluid">
     <!-- Page Heading -->
@@ -15,9 +18,6 @@
           <?php endforeach; ?>
         </select>
       </form>
-    </div>
-    <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800">Hasil</h1>
     </div>
     <!-- Content Row -->
     <div class="row">
@@ -70,7 +70,7 @@
                       <?php
                            $last = $this->db->query("SELECT a.name as nama, AVG(r.score) as rata FROM saw_result r LEFT JOIN saw_alternatives a ON a.id_alternative=r.id_alternative 
                                 WHERE r.id_event = '$ev' GROUP BY r.id_alternative ORDER BY rata DESC LIMIT 1")->row();
-                                echo $eventid->title." adalah <strong>".$last->nama."</strong> dengan nilai akhir <strong >".number_format($last->rata, 2, '.', '')."</strong>";
+                                echo "<div class='alert alert-primary' role='alert'>".$eventid->title." adalah <strong>".$last->nama."</strong> dengan nilai akhir <strong >".number_format($last->rata, 2, '.', '')."</strong></div>";
                         ?>      
                     </div>
                 </div>

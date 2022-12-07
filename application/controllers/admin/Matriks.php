@@ -30,8 +30,13 @@ class Matriks extends CI_Controller {
 		$data['kriteria'] = $this->Model_kriteria->getAll($idevent)->result();
 		$data['alternatif'] = $this->Model_alternatif->getAll($idevent)->result();
 		$data['jmlc'] = $this->Model_kriteria->getAll($idevent)->num_rows();
+		$cek_data = $this->Model_penilaian->getEv($idevent,$id_user)->num_rows();
 		$this->load->view('layout/header',$data);
-		$this->load->view('admin/matriks',$data);
+		if($cek_data <= 0){
+			$this->load->view('admin/error',$data);
+		}else{
+			$this->load->view('admin/matriks',$data);
+		}
 		$this->load->view('layout/footer');
 	}
 }

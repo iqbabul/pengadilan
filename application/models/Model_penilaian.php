@@ -9,6 +9,14 @@ class Model_penilaian extends CI_Model{
 		$this->db->from($this->tabel);
 		return $this->db->get(); 		
 	}
+
+	public function getEv($ev,$us){
+		$this->db->select();
+		$this->db->from($this->tabel);
+		$this->db->where('id_event', $ev);
+		$this->db->where('id_user', $us);
+		return $this->db->get();
+	}
 	public function getById($id){
 		return $this->db->get_where($this->tabel,array('id_alternative' => $id)); 		
 	}

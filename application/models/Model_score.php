@@ -5,7 +5,23 @@ class Model_score extends CI_Model{
 	public $tabel = "saw_score";	
 
 	public function getAll(){
-        return $this->db->get_where($this->tabel, array('id_score'=>'1'));
+        $this->db->from($this->tabel);
+		return $this->db->get();
+	}
+	public function delete(){
+		$this->db->truncate($this->tabel);
+	}
+
+	public function getMin(){
+		$this->db->select("MIN(score) as min");
+		$this->db->from($this->tabel);
+		return $this->db->get();
+	}
+
+	public function getMax(){
+		$this->db->select("MAX(score) as max");
+		$this->db->from($this->tabel);
+		return $this->db->get();
 	}
 
 	public function delete_kriteria($id){
@@ -19,6 +35,12 @@ class Model_score extends CI_Model{
 	public function insert($data){
 		$query = $this->db->insert($this->tabel, $data);
 		return $query;
+	}
+
+	public function update_score($id,$ket){
+		$this->db->set(array('ket' => $ket));
+		$this->db->where('id_score', $id);
+		$this->db->update($this->tabel);
 	}
 	
 }

@@ -38,10 +38,10 @@ class Model_alternatif extends CI_Model{
     }
 
 	public function delete_alternatif($id){
-		$this->db->set(array('status' => '0'));
-		$this->db->where('id_alternative', $id);
-		$this->db->update($this->tabel);
-		//$this->db->delete($this->tabel, array('id_alternative' => $id));
+		// $this->db->set(array('status' => '0'));
+		// $this->db->where('id_alternative', $id);
+		// $this->db->update($this->tabel);
+		$this->db->delete($this->tabel, array('id_alternative' => $id));
 	}
 
 	public function status_alternatif($id, $data){
