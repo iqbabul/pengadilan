@@ -8,7 +8,7 @@
             <div class="card-content">
                 <div class="card-body">
                     <p class="card-text">
-                    Error !
+                    Peringatan
                     </p>
                     <hr>
                     <p class="card-text">

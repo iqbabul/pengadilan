@@ -35,7 +35,7 @@
     </div>
     <div class="row mb-4">
       <div class="col-6">
-        <?php if($eventid->status == 1): ?>
+        <?php if($eventid->status == 0): ?>
           <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm" data-toggle="modal" data-target="#exampleModal1">Impor Data</a>        
           <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm" data-toggle="modal" data-target="#exampleModal">Tambah Kriteria</a>        
         <?php endif; ?>
@@ -61,7 +61,7 @@
                                     <th colspan="2">Kriteria</th>
                                     <th>Atribut</th>
                                     <th class="text-center">Bobot (%)</th>
-                                    <?php if($eventid->status == 1): ?>
+                                    <?php if($eventid->status == 0): ?>
                                     <th colspan="2" class="text-center">Aksi</th>
                                     <?php endif ?>
                                 </tr>
@@ -74,7 +74,7 @@
                                     <td><?=$row->criteria;?></td>
                                     <td><span class="badge badge-success"><?=$row->attribute;?></span></td>
                                     <td class="text-center"><?=$row->weight;?>%</td>
-                                    <?php if($eventid->status == 1): ?>
+                                    <?php if($eventid->status == 0): ?>
                                     <td class="text-center">
                                     <button class="btn btn-sm btn-circle btn-primary"><i class="fas fa-edit"></i></button>
                                     </td>
@@ -87,7 +87,7 @@
                                 <tr>
                                   <td colspan="4" class="text-center">Jumlah</td>
                                   <td class="text-center"><?=$jml;?>%</td>
-                                  <?php if($eventid->status == 1): ?>
+                                  <?php if($eventid->status == 0): ?>
                                   <td colspan="2"></td>
                                   <?php endif ?>
                                 </tr>
@@ -111,6 +111,7 @@
     </div>
 </div>
 <!-- /.container-fluid -->
+<?php if($eventid->status == 1 || $eventid->status == 0): ?>
 <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
@@ -155,6 +156,8 @@
     </div>
   </div>
 </div>
+<?php endif ?>
+<?php if($eventid->status == 0): ?>
 <!-- Modal -->
 <div class="modal fade" id="exampleModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
@@ -165,7 +168,7 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <form method="post" action="<?=base_url('admin/data/impor_alternatif')?> ">
+      <form method="post" action="<?=base_url('admin/data/impor_kriteria')?> ">
         <div class="modal-body">        
           <div class="form-group">
             <label for="exampleInputEmail1">Acara</label>
@@ -185,6 +188,7 @@
     </div>
   </div>
 </div>
+<?php endif ?>
 <script>
   $(function() {
     var flashData = $('.flash-data').data('flashdata');

@@ -2,7 +2,7 @@
  
 class Model_penilaian extends CI_Model{
 	
-	public $tabel = "saw_evaluations";	
+	public $tabel = "saw_evaluations";
 
 	public function getAll(){
 		$this->db->select('*');
@@ -11,10 +11,11 @@ class Model_penilaian extends CI_Model{
 	}
 
 	public function getEv($ev,$us){
-		$this->db->select();
+		$this->db->select('*,saw_event.status as evstatus');
 		$this->db->from($this->tabel);
-		$this->db->where('id_event', $ev);
-		$this->db->where('id_user', $us);
+		$this->db->join('saw_event','saw_event.id_event = '.$this->tabel.".id_event",'left');
+		$this->db->where('saw_evaluations.id_event', $ev);
+		$this->db->where('saw_evaluations.id_user', $us);
 		return $this->db->get();
 	}
 	public function getById($id){

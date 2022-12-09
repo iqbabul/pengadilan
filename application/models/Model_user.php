@@ -59,11 +59,6 @@ class Model_user extends CI_Model{
 		$this->db->update($this->tabel, ['foto' => $foto]);
 	}
 
-	public function update_password($id, $pass){ 
-		$this->db->where('id_user',$id);
-		$this->db->update($this->tabel, ['password' => $pass]);
-	}
-
 	public function update($id, $data){ 
 		$this->db->where('id_user',$id);
 		$this->db->update($this->tabel, $data);

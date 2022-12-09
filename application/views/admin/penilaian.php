@@ -11,13 +11,21 @@
                 <div class="card-content">
                     <div class="card-body">
                     <div class="alert alert-primary" role="alert">
-                        <h4>Petunjuk Pengisian</h4>
-                        <ol>
-                            <li>Berikanlah Nilai/Bobot : dari angka <?=$min->min;?> s/d <?=$max->max;?></li>
-                            <?php foreach($score as $sc): ?>
-                            <li>Nilai <?=$sc->score;?> : <strong><?=$sc->ket;?></strong></li>
-                            <?php endforeach ?>
-                        </ol>
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <h4>Petunjuk Pengisian</h4>
+                                <ol>
+                                    <li>Berikanlah Nilai/Bobot : dari angka <?=$min->min;?> s/d <?=$max->max;?></li>
+                                    <?php foreach($score as $sc): ?>
+                                    <li>Nilai <?=$sc->score;?> : <strong><?=$sc->ket;?></strong></li>
+                                    <?php endforeach ?>
+                                </ol>
+                            </div>
+                            <div class="col-lg-6 text-center">
+                                <img src="<?=base_url()?>assets/img/alternatif/<?=$alternatif->photo?>" width="100" class="mb-2" alt="">
+                                <br><?=$alternatif->name;?>
+                            </div>
+                        </div>
                     </div>
                         <form action="<?=base_url('admin/penilaian/simpan')?>" method="post">
                         <input type="hidden" name="alternatif" value="<?=$alternatif->id_alternative;?>">

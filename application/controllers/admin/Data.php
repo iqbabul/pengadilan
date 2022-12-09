@@ -135,6 +135,23 @@ class Data extends CI_Controller {
 		redirect(base_url('admin/data/alternatif'));
 	}
 
+	public function impor_kriteria(){
+		$data['kriteria'] = $this->Model_kriteria->getByEvent($this->input->post('event'))->result();
+		foreach($data['kriteria'] as $kriteria){
+			// echo $alternatif->name;
+			$impor = array(
+				'id_event' => $this->input->post('ev'),
+				'criteria' => $kriteria->criteria,
+				'alias' => $kriteria->alias,
+				'weight' => $kriteria->weight,
+				'attribute' => $kriteria->attribute,
+				'status' => $kriteria->status
+			);
+			$this->Model_kriteria->insert($impor);
+		}
+		redirect(base_url('admin/data/kriteria'));
+	}
+
 	public function hapus_alternatif($id){
 		$this->Model_alternatif->delete_alternatif($id);
 		$this->session->set_flashdata('alert','dihapus');

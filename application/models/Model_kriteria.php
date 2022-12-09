@@ -21,6 +21,11 @@ class Model_kriteria extends CI_Model{
 		return $this->db->get();		
 	}
 
+	public function getByEvent($id){
+		return $this->db->get_where($this->tabel,array('id_event' => $id)); 		
+
+	}
+
 	public function delete_kriteria($id){
 		// $this->db->set(array('status' => '0'));
 		// $this->db->where('id_criteria', $id);

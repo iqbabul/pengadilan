@@ -135,4 +135,56 @@ class Setting extends CI_Controller {
 			// $this->load->view('/alternatif',$data);			
 		}
 	}
+
+	public function update_user(){
+		print_r($this->input->post());
+		$login = $this->session->userdata('nama');
+		$data['user'] = $this->Model_user->getLogin($login)->row();
+		if($data['user']->id_access == 1){
+			//print_r($this->input->post());
+			$config['upload_path']   = './assets/img/user';
+			$config['allowed_types'] = 'jpg|png|jpeg';
+			$this->load->library('upload', $config);	
+			if ( ! $this->upload->do_upload('foto')){
+				$data = array(
+					'fullname' => $this->input->post('fullname'),
+					'id_access' => $this->input->post('akses'),
+					'status' => $this->input->post('sts')
+				);	
+				// print_r($data);
+				$this->Model_user->update($this->input->post('ids'),$data);
+				$this->session->set_flashdata('alert','ditambah');
+				redirect(base_url('admin/setting/user'));
+			}else{
+				$data = array(
+					'fullname' => $this->input->post('fullname'),
+					'id_access' => $this->input->post('akses'),
+					'status' => $this->input->post('sts'),
+					'foto' => $this->upload->data('file_name')
+				);	
+				// print_r($data);
+				$this->Model_user->update($this->input->post('ids'),$data);
+				$this->session->set_flashdata('alert','ditambah');
+				redirect(base_url('admin/setting/user'));
+			}
+		}else{
+			echo "anda tidak memiliki akses halaman ini";
+			// $this->load->view('/alternatif',$data);			
+		}
+	}
+
+	public function hapus_user($id){
+		$this->Model_user->delete($id);
+		redirect(base_url('admin/setting/user'));
+	}
+
+	public function reset_password($id){
+		$reset = md5(12345);
+		$data = array(
+			'password' => $reset
+		);
+		$this->Model_user->update($id,$data);
+		redirect(base_url('admin/setting/user'));
+
+	}
 }

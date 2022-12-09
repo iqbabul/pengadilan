@@ -32,8 +32,12 @@ class Matriks extends CI_Controller {
 		$data['jmlc'] = $this->Model_kriteria->getAll($idevent)->num_rows();
 		$cek_data = $this->Model_penilaian->getEv($idevent,$id_user)->num_rows();
 		$this->load->view('layout/header',$data);
-		if($cek_data <= 0){
-			$this->load->view('admin/error',$data);
+		if($data['eventid']->status == 1){
+			if($cek_data <= 0){
+				$this->load->view('admin/error',$data);
+			}else{
+				$this->load->view('admin/matriks',$data);
+			}
 		}else{
 			$this->load->view('admin/matriks',$data);
 		}
