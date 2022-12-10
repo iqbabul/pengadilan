@@ -1,3 +1,6 @@
+<?php
+  error_reporting(0);
+?>
 <!-- Begin Page Content -->
 <div class="container-fluid">
     <!-- Page Heading -->
@@ -88,6 +91,7 @@
           <div class="form-group">
             <label for="exampleInputEmail1">Nama Kandidat</label>
             <input type="text" name="alternatif" class="form-control" required>
+            <input type="hidden" name="idev" class="form-control" value="<?=$eventid->id_event?>" required>
           </div>
           <div class="form-group">
             <label for="exampleInputPassword1">Jabatan</label>

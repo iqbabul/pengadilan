@@ -19,17 +19,24 @@ class Data extends CI_Controller {
 		$data['user'] = $this->Model_user->getLogin($login)->row();
 		$id_user = $data['user']->id_user;
 		$idevent = empty($this->input->post('event')) ? $this->event_on() : $this->input->post('event');
-		$data['eventD'] = $this->Model_event->getDone()->result();
-		$data['eventid'] = $this->Model_event->getById($idevent)->row();
+		// echo $idevent;
+		$this->load->view('layout/header',$data);
 		if($data['user']->id_access == 1){
-			$data['event'] = $this->Model_event->getAllAdm()->result();
-			$data['alternatif'] = $this->Model_alternatif->getAllAdm($idevent)->result();
-			$this->load->view('layout/header',$data);
-			$this->load->view('admin/adm_alternatif',$data);
+			if($idevent == 0){
+				$data['alert'] = "Anda harus mengisi data di menu Pengaturan terlebih dahulu";
+				$this->load->view('admin/error',$data);
+			}else{
+				$data['eventD'] = $this->Model_event->getDone()->result();
+				$data['eventid'] = $this->Model_event->getById($idevent)->row();
+				$data['event'] = $this->Model_event->getAllAdm()->result();
+				$data['alternatif'] = $this->Model_alternatif->getAllAdm($idevent)->result();
+				$this->load->view('admin/adm_alternatif',$data);	
+			}
 		}else{
+			$data['eventD'] = $this->Model_event->getDone()->result();
+			$data['eventid'] = $this->Model_event->getById($idevent)->row();
 			$data['event'] = $this->Model_event->getAll()->result();
 			$data['alternatif'] = $this->Model_alternatif->getAll()->result();
-			$this->load->view('layout/header',$data);
 			$this->load->view('admin/alternatif',$data);
 		}
 		$this->load->view('layout/footer');
@@ -40,10 +47,21 @@ class Data extends CI_Controller {
 		$data['user'] = $this->Model_user->getLogin($login)->row();
 		if($data['user']->id_access == 1){
 			$data['event'] = $this->Model_event->getMaxIDAdm()->row();
+			$cek = $this->Model_event->getMaxIDAdm()->num_rows();
+			if($cek <= 0){
+				return 0;
+			}else{
+				return $data['event']->id_event;
+			}
 		}else{
 			$data['event'] = $this->Model_event->getMaxID()->row();
+			$cek = $this->Model_event->getMaxID()->num_rows();
+			if($cek <= 0){
+				return 0;
+			}else{
+				return $data['event']->id_event;
+			}
 		}
-		return $data['event']->id_event;
 	}
 
 	public function kriteria(){
@@ -52,14 +70,18 @@ class Data extends CI_Controller {
 		$login = $this->session->userdata('nama');
 		$data['user'] = $this->Model_user->getLogin($login)->row();
 		$id_user = $data['user']->id_user;
-		$data['event'] = $this->Model_event->getAll()->result();
 		$data['eventid'] = $this->Model_event->getById($idevent)->row();
 		$data['eventD'] = $this->Model_event->getDone()->result();
 		$this->load->view('layout/header',$data);
 		if($data['user']->id_access == 1){
-			$data['event'] = $this->Model_event->getAllAdm()->result();
-			$data['kriteria'] = $this->Model_kriteria->getAllAdm($idevent)->result();
-			$this->load->view('admin/adm_kriteria',$data);
+			if($idevent == 0){
+				$data['alert'] = "Anda harus mengisi data di menu Pengaturan terlebih dahulu";
+				$this->load->view('admin/error',$data);
+			}else{
+				$data['event'] = $this->Model_event->getAllAdm()->result();
+				$data['kriteria'] = $this->Model_kriteria->getAllAdm($idevent)->result();
+				$this->load->view('admin/adm_kriteria',$data);	
+			}
 		}else{
 			$data['event'] = $this->Model_event->getAll()->result();
 			$data['kriteria'] = $this->Model_kriteria->getAll($idevent)->result();
@@ -81,9 +103,11 @@ class Data extends CI_Controller {
 				echo "$error";
 			}else{
 				$data = array(
+					'id_event' => $this->input->post('idev'),
 					'name' => $this->input->post('alternatif'),
 					'jabatan' => $this->input->post('jabatan'),
-					'photo' => $this->upload->data('file_name')
+					'photo' => $this->upload->data('file_name'),
+					'status' => '1'
 				);	
 				// print_r($data);
 				$this->Model_alternatif->insert($data);

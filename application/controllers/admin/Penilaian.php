@@ -17,7 +17,12 @@ class Penilaian extends CI_Controller {
 
     public function event_on(){
 		$data['event'] = $this->Model_event->getMaxID()->row();
-		return $data['event']->id_event;
+		$cek = $this->Model_event->getMaxID()->num_rows();
+		if($cek <= 0){
+			return 0;
+		}else{
+			return $data['event']->id_event;
+		}
 	}
 
 	public function index()
@@ -30,7 +35,12 @@ class Penilaian extends CI_Controller {
 		$data['eventid'] = $this->Model_event->getById($idevent)->row();
 		$data['alternatif'] = $this->Model_alternatif->getAll($idevent)->result();
 		$this->load->view('layout/header',$data);
-		$this->load->view('admin/alternatif',$data);
+		if($idevent == 0){
+			$data['alert'] = "Aplikasi belum disetting oleh Admin";
+			$this->load->view('admin/error',$data);
+		}else{
+			$this->load->view('admin/alternatif',$data);
+		}
 		$this->load->view('layout/footer');
 	}
 

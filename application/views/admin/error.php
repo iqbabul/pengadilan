@@ -12,7 +12,7 @@
                     </p>
                     <hr>
                     <p class="card-text">
-                        Anda harus mengisi form penilaian terlebih dahulu klik <a href="<?=base_url('admin/penilaian')?>">di sini</a>
+                        <?=$alert; ?>
                     </p>
                 </div>
             </div>

@@ -29,7 +29,7 @@ class Setting extends CI_Controller {
 	public function simpan_acara(){
 		$data = array(
 			'title' => $this->input->post('acara'),
-			'status' => 0
+			'status' => '0'
 		);
 		$this->Model_event->insert($data);
 		redirect(base_url('admin/setting/umum'));

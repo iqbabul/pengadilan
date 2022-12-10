@@ -16,7 +16,12 @@ class Ranking extends CI_Controller {
 
     public function event_on(){
 		$data['event'] = $this->Model_event->getMaxID()->row();
-		return $data['event']->id_event;
+		$cek = $this->Model_event->getMaxID()->num_rows();
+		if($cek <= 0){
+			return 0;
+		}else{
+			return $data['event']->id_event;
+		}
 	}
 
     public function index()
@@ -30,14 +35,11 @@ class Ranking extends CI_Controller {
 		$data['kriteria'] = $this->Model_kriteria->getAll($idevent)->result(); 
 		$data['alternatif'] = $this->Model_alternatif->getAll($idevent)->result();
 		$data['jmlc'] = $this->Model_kriteria->getAll($idevent)->num_rows();
-		$cek_data = $this->Model_penilaian->getEv($idevent,$id_user)->num_rows();
+		$data['cek'] = $this->Model_penilaian->getEv($idevent,$id_user)->num_rows();
 		$this->load->view('layout/header',$data);
-		if($data['eventid']->status == 1){
-			if($cek_data <= 0){
-				$this->load->view('admin/error',$data);
-			}else{
-				$this->load->view('admin/ranking',$data);
-			}
+		if($idevent == 0){
+			$data['alert'] = "Aplikasi belum disetting oleh Admin";
+			$this->load->view('admin/error',$data);
 		}else{
 			$this->load->view('admin/ranking',$data);
 		}

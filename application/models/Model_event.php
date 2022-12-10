@@ -19,6 +19,15 @@ class Model_event extends CI_Model{
 		return $this->db->get();		
 	}
 
+	public function getMaxID(){
+		$this->db->select('*');
+		$this->db->from($this->tabel);
+		$this->db->where('status !=','0'); 
+		$this->db->order_by('id_event', 'desc');
+		$this->db->limit(1);
+		return $this->db->get();		
+	}
+
 	public function getDone(){
 		$this->db->select('*');
 		$this->db->from($this->tabel); 
@@ -37,15 +46,6 @@ class Model_event extends CI_Model{
 
 	public function getById($id){
 		return $this->db->get_where($this->tabel, array('id_event' => $id));
-	}
-
-	public function getMaxID(){
-		$this->db->select('*');
-		$this->db->from($this->tabel);
-		$this->db->where('status !=','0'); 
-		$this->db->order_by('id_event', 'desc');
-		$this->db->limit(1);
-		return $this->db->get();		
 	}
 
 	public function getByStatus(){
