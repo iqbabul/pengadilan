@@ -60,9 +60,9 @@
                                     LEFT JOIN saw_users u ON u.id_user = r.id_user 
                                     WHERE id_event = '$ev' AND id_alternative = '$alter'")->result();?>
                                     <?php foreach($nilai as $nilai): ?>
-                                    <td class="text-center"><?=number_format($nilai->score, 2, '.', '');?></td>
+                                    <td class="text-center"><?=number_format($nilai->score, 3, '.', '');?></td>
                                     <?php $rata += $nilai->score; endforeach ?>
-                                    <td class="text-center"><?=number_format($rata/$pen, 2, '.', '');?></td>
+                                    <td class="text-center"><?=number_format($rata/$pen, 3, '.', '');?></td>
                                 </tr>
                             <?php endforeach; ?>
                         </table>
@@ -70,7 +70,7 @@
                       <?php
                            $last = $this->db->query("SELECT a.name as nama, AVG(r.score) as rata FROM saw_result r LEFT JOIN saw_alternatives a ON a.id_alternative=r.id_alternative 
                                 WHERE r.id_event = '$ev' GROUP BY r.id_alternative ORDER BY rata DESC LIMIT 1")->row();
-                                echo "<div class='alert alert-primary' role='alert'>".$eventid->title." adalah <strong>".$last->nama."</strong> dengan nilai akhir <strong >".number_format($last->rata, 2, '.', '')."</strong></div>";
+                                echo "<div class='alert alert-success' role='alert'>".$eventid->title." adalah <strong>".$last->nama."</strong> dengan nilai akhir <strong >".number_format($last->rata, 3, '.', '')."</strong></div>";
                         ?>      
                     </div>
                 </div>

@@ -8,7 +8,7 @@
                 <div class="card-header py-3">
                     <div class="row">
                         <div class="col-lg-6">
-                            <h6 class="m-0 font-weight-bold text-success">Data Pengguna</h6>
+                            <h6 class="m-0 font-weight-bold text-success">Data Pegawai</h6>
                         </div>
                         <div class="col-lg-6 text-right">
                             <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm" data-toggle="modal" data-target="#exampleModal1">Tambah</a>
@@ -23,8 +23,9 @@
                                         <th width="1%">No</th>
                                         <th>Foto</th>
                                         <th>Nama</th>
-                                        <th>Username</th>
-                                        <th>Akses</th>
+                                        <th>Tanggal Lahir</th>
+                                        <th>Telepon</th>
+                                        <th>Jabatan</th>
                                         <th>Status</th>
                                         <th class="text-center">Aksi</th>
                                     </tr>
@@ -35,8 +36,9 @@
                                             <td class="text-center"><?=$no++; ?></td>
                                             <td class="text-center"><img src="<?=base_url()?>assets/img/user/<?=$row->foto?>" alt="" class="rounded-circle" width="50"></td>
                                             <td><?=$row->fullname ?></td>
-                                            <td><?=$row->username ?></td>
-                                            <td><span class="badge badge-primary"><?=$row->name ?></span></td>
+                                            <td><?=$row->tempat_lahir;?>, <?=date('d-m-Y',strtotime($row->tgl_lahir));?></td>
+                                            <td><?=$row->telp ?></td>
+                                            <td><span class="badge badge-dark"><?=$row->jabatan ?></span></td>
                                             <td class="text-center">
                                               <?= $row->status == "on" ? "<button class='btn btn-sm btn-circle btn-success'><i class='fa fa-check'></i></button>" : "<button class='btn btn-sm btn-circle btn-danger'><i class='fa fa-power-off'></i></button>"; ?>
                                             </td>
@@ -46,9 +48,10 @@
                                                     <i class="fa fa-list"></i>
                                                 </button>
                                                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                                    <li><a class="dropdown-item" href="#" data-toggle="modal" data-target="#exampleModal1<?=$row->id_user;?>"><i class="fa fa-eye"></i> Detail</a></li>
                                                     <li><a class="dropdown-item" href="#" data-toggle="modal" data-target="#exampleModal1<?=$row->id_user;?>"><i class="fa fa-edit"></i> Edit</a></li>
                                                     <li><a class="dropdown-item" class="tombol-hapus" href="<?=base_url('admin/setting/hapus_user')?>/<?=$row->id_user;?>"><i class="fa fa-trash"></i> Hapus</a></li>
-                                                    <li><a class="dropdown-item" href="<?=base_url('admin/setting/reset_password')?>/<?=$row->id_user;?>"><i class="fa fa-recycle"></i> Reset</a></li>
+                                                    <!-- <li><a class="dropdown-item" href="<?=base_url('admin/setting/reset_password')?>/<?=$row->id_user;?>"><i class="fa fa-recycle"></i> Reset</a></li> -->
                                                 </ul>
                                             </div>
                                             </td>
@@ -122,37 +125,45 @@
 <!-- /.container-fluid -->
 
 <!-- Modal -->
-<div class="modal fade" id="exampleModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade bd-example-modal-lg" id="exampleModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Tambah Pengguna</h5>
+        <h5 class="modal-title" id="exampleModalLabel">Tambah Pegawai</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <form method="post" enctype="multipart/form-data" action="<?=base_url('admin/setting/simpan_user')?> ">
+      <form method="post" enctype="multipart/form-data" action="<?=base_url('admin/data/simpan')?> ">
         <div class="modal-body">        
-          <div class="form-group">
-            <label for="exampleInputEmail1">Username</label>
-            <input type="text" name="username" class="form-control" required>
-          </div>
-          <div class="form-group">
-            <label for="exampleInputEmail1">Password</label>
-            <input type="password" name="password" class="form-control" required>
-          </div>
           <div class="form-group">
             <label for="exampleInputPassword1">Nama Lengkap</label>
             <input type="text" name="fullname" class="form-control" required>
           </div>
           <div class="form-group">
-            <label for="exampleInputPassword1">Akses</label>
-            <select name="akses" id="" class="form-control">
-                <option value="">-Pilih-</option>
-                <?php foreach($access as $ac): ?>
-                <option value="<?=$ac->id_access;?>"><?=$ac->name;?></option>
-                <?php endforeach ?>
-            </select>
+            <label for="exampleInputPassword1">Tempat Lahir</label>
+            <input type="text" name="tmpt" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label for="exampleInputPassword1">Tanggal Lahir</label>
+            <input type="date" name="tgl" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label for="exampleInputPassword1">Alamat</label>
+            <textarea name="alamat" cols="15" class="form-control" rows="5"></textarea>
+          </div>
+          <div class="form-group">
+            <label for="exampleInputPassword1">Jenis Kelamin</label><br>
+            <input type="radio" name="jk" value="Laki-laki"> Laki-laki <br>
+            <input type="radio" name="jk" value="Perempuan"> Perempuan
+          </div>
+          <div class="form-group">
+            <label for="exampleInputPassword1">No.Telp</label>
+            <input type="number" name="telp" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label for="exampleInputPassword1">Jabatan</label>
+            <input type="text" name="jb" class="form-control" required>
           </div>
           <div class="form-group">
             <label for="exampleFormControlFile1">Foto</label>

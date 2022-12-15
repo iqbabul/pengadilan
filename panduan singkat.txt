@@ -1,0 +1,18 @@
+1. login admin (username : admin password : admin213)
+2. isi data pada menu pengaturan
+	pengaturan umum :
+	- input data acara
+	- input rentang nilai yang akan diberikan
+	- input keterangan masing-masing nilai
+	pengaturan pengguna
+	- input data penilai
+3. isi data alternatif/kandidat yang akan dinilai pada menu alternatif
+4. isi data kriteria yang akan dinilai pada menu kriteria
+	- nilai bobot = 100%
+5. kembali ke menu pengaturan umum aktifkan acara yang akan dilaksanakan
+6. login penilai yang sudah diinputkan
+7. lakukan penilaian berdasarkan kriteria yang telah ditentukan
+8. menu matriks berisi daftar nilai yang telah diberikan kepada setiap kandidat
+9. menu peringkat berisi jumlah nilai dari setiap kandidat dan peringkat sementara
+10. menu hasil berisi daftar nilai yang diberikan oleh semua penilai dan nilai akhir dari setiap kandidat
+11. acara selesai ubah status acara menjadi 'selesai' data akan terkunci.

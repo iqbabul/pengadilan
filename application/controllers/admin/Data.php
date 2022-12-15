@@ -13,178 +13,101 @@ class Data extends CI_Controller {
 		$this->load->model('Model_kriteria');
     }
 
-	public function alternatif()
+    public function index()
 	{
-		$login = $this->session->userdata('nama');
+		$login = $this->session->userdata('id_user');
 		$data['user'] = $this->Model_user->getLogin($login)->row();
-		$id_user = $data['user']->id_user;
-		$idevent = empty($this->input->post('event')) ? $this->event_on() : $this->input->post('event');
-		// echo $idevent;
+		$data['usr'] = $this->Model_user->getAll()->result();
 		$this->load->view('layout/header',$data);
-		if($data['user']->id_access == 1){
-			if($idevent == 0){
-				$data['alert'] = "Anda harus mengisi data di menu Pengaturan terlebih dahulu";
-				$this->load->view('admin/error',$data);
-			}else{
-				$data['eventD'] = $this->Model_event->getDone()->result();
-				$data['eventid'] = $this->Model_event->getById($idevent)->row();
-				$data['event'] = $this->Model_event->getAllAdm()->result();
-				$data['alternatif'] = $this->Model_alternatif->getAllAdm($idevent)->result();
-				$this->load->view('admin/adm_alternatif',$data);	
-			}
-		}else{
-			$data['eventD'] = $this->Model_event->getDone()->result();
-			$data['eventid'] = $this->Model_event->getById($idevent)->row();
-			$data['event'] = $this->Model_event->getAll()->result();
-			$data['alternatif'] = $this->Model_alternatif->getAll()->result();
-			$this->load->view('admin/alternatif',$data);
-		}
+		$this->load->view('admin/adm_set_user',$data);
 		$this->load->view('layout/footer');
 	}
 
-    public function event_on(){
-		$login = $this->session->userdata('nama');
-		$data['user'] = $this->Model_user->getLogin($login)->row();
-		if($data['user']->id_access == 1){
-			$data['event'] = $this->Model_event->getMaxIDAdm()->row();
-			$cek = $this->Model_event->getMaxIDAdm()->num_rows();
-			if($cek <= 0){
-				return 0;
-			}else{
-				return $data['event']->id_event;
-			}
-		}else{
-			$data['event'] = $this->Model_event->getMaxID()->row();
-			$cek = $this->Model_event->getMaxID()->num_rows();
-			if($cek <= 0){
-				return 0;
-			}else{
-				return $data['event']->id_event;
-			}
-		}
-	}
-
-	public function kriteria(){
-		$idevent = empty($this->input->post('event')) ? $this->event_on() : $this->input->post('event');
-		//echo $idevent;
-		$login = $this->session->userdata('nama');
-		$data['user'] = $this->Model_user->getLogin($login)->row();
-		$id_user = $data['user']->id_user;
-		$data['eventid'] = $this->Model_event->getById($idevent)->row();
-		$data['eventD'] = $this->Model_event->getDone()->result();
-		$this->load->view('layout/header',$data);
-		if($data['user']->id_access == 1){
-			if($idevent == 0){
-				$data['alert'] = "Anda harus mengisi data di menu Pengaturan terlebih dahulu";
-				$this->load->view('admin/error',$data);
-			}else{
-				$data['event'] = $this->Model_event->getAllAdm()->result();
-				$data['kriteria'] = $this->Model_kriteria->getAllAdm($idevent)->result();
-				$this->load->view('admin/adm_kriteria',$data);	
-			}
-		}else{
-			$data['event'] = $this->Model_event->getAll()->result();
-			$data['kriteria'] = $this->Model_kriteria->getAll($idevent)->result();
-			$this->load->view('admin/kriteria',$data);
-		}
-		$this->load->view('layout/footer');
-	}
-
-	public function simpan_alternatif(){
-		$login = $this->session->userdata('nama');
+	public function simpan(){
+		print_r($this->input->post());
+		$login = $this->session->userdata('id_user');
 		$data['user'] = $this->Model_user->getLogin($login)->row();
 		if($data['user']->id_access == 1){
 			//print_r($this->input->post());
-			$config['upload_path']   = './assets/img/alternatif';
+			$config['upload_path']   = './assets/img/user';
 			$config['allowed_types'] = 'jpg|png|jpeg';
 			$this->load->library('upload', $config);	
 			if ( ! $this->upload->do_upload('foto')){
 				$error = array('error' => $this->upload->display_errors());
-				echo "$error";
+				print_r($error);
 			}else{
 				$data = array(
-					'id_event' => $this->input->post('idev'),
-					'name' => $this->input->post('alternatif'),
-					'jabatan' => $this->input->post('jabatan'),
-					'photo' => $this->upload->data('file_name'),
-					'status' => '1'
+					'fullname' => $this->input->post('fullname'),
+					'tempat_lahir' => $this->input->post('tmpt'),
+					'tgl_lahir' => $this->input->post('tgl'),
+					'alamat' => $this->input->post('alamat'),
+					'telp' => $this->input->post('telp'),
+					'jenis_kelamin' => $this->input->post('jk'),
+					'jabatan' => $this->input->post('jb'),
+					'status' => 'on',
+					'foto' => $this->upload->data('file_name')
 				);	
 				// print_r($data);
-				$this->Model_alternatif->insert($data);
+				$this->Model_user->simpan($data);
 				$this->session->set_flashdata('alert','ditambah');
-				redirect(base_url('admin/data/alternatif'));
+				redirect(base_url('admin/data'));
 			}
 		}else{
 			echo "anda tidak memiliki akses halaman ini";
 			// $this->load->view('/alternatif',$data);			
 		}
-
 	}
-
-	public function simpan_kriteria(){
+	
+	public function update_user(){
 		print_r($this->input->post());
+		$login = $this->session->userdata('id_user');
+		$data['user'] = $this->Model_user->getLogin($login)->row();
+		if($data['user']->id_access == 1){
+			//print_r($this->input->post());
+			$config['upload_path']   = './assets/img/user';
+			$config['allowed_types'] = 'jpg|png|jpeg';
+			$this->load->library('upload', $config);	
+			if ( ! $this->upload->do_upload('foto')){
+				$data = array(
+					'fullname' => $this->input->post('fullname'),
+					'id_access' => $this->input->post('akses'),
+					'status' => $this->input->post('sts')
+				);	
+				// print_r($data);
+				$this->Model_user->update($this->input->post('ids'),$data);
+				$this->session->set_flashdata('alert','ditambah');
+				redirect(base_url('admin/setting/user'));
+			}else{
+				$data = array(
+					'fullname' => $this->input->post('fullname'),
+					'id_access' => $this->input->post('akses'),
+					'status' => $this->input->post('sts'),
+					'foto' => $this->upload->data('file_name')
+				);	
+				// print_r($data);
+				$this->Model_user->update($this->input->post('ids'),$data);
+				$this->session->set_flashdata('alert','ditambah');
+				redirect(base_url('admin/setting/user'));
+			}
+		}else{
+			echo "anda tidak memiliki akses halaman ini";
+			// $this->load->view('/alternatif',$data);			
+		}
+	}
+
+	public function hapus_user($id){
+		$this->Model_user->delete($id);
+		redirect(base_url('admin/setting/user'));
+	}
+
+	public function reset_password($id){
+		$reset = md5(12345);
 		$data = array(
-			'id_event' => $this->input->post('idevent'),
-			'alias' => $this->input->post('alias'),
-			'criteria' => $this->input->post('kriteria'),
-			'weight' => $this->input->post('nilai'),
-			'attribute' => $this->input->post('atribut'),
+			'password' => $reset
 		);
-		$this->Model_kriteria->insert($data);
-		redirect(base_url('admin/data/kriteria'));
+		$this->Model_user->update($id,$data);
+		redirect(base_url('admin/setting/user'));
+
 	}
 
-	public function status_alternatif(){
-		$id = $this->input->post('id');
-		$data = array('status' => $this->input->post('status'));
-		$this->Model_alternatif->status_alternatif($id, $data);
-		$alert = $this->input->post('status') == '1' ? "diaktifkan" : "dipasifkan";
-		$this->session->set_flashdata('alert', $alert);
-		redirect(base_url('admin/data/alternatif'));
-	}
-
-	public function impor_alternatif(){
-		$data['alternatif'] = $this->Model_alternatif->getByEvent($this->input->post('event'))->result();
-		foreach($data['alternatif'] as $alternatif){
-			// echo $alternatif->name;
-			$impor = array(
-				'id_event' => $this->input->post('ev'),
-				'name' => $alternatif->name,
-				'jabatan' => $alternatif->jabatan,
-				'photo' => $alternatif->photo,
-				'status' => $alternatif->status
-			);
-			$this->Model_alternatif->insert($impor);
-		}
-		redirect(base_url('admin/data/alternatif'));
-	}
-
-	public function impor_kriteria(){
-		$data['kriteria'] = $this->Model_kriteria->getByEvent($this->input->post('event'))->result();
-		foreach($data['kriteria'] as $kriteria){
-			// echo $alternatif->name;
-			$impor = array(
-				'id_event' => $this->input->post('ev'),
-				'criteria' => $kriteria->criteria,
-				'alias' => $kriteria->alias,
-				'weight' => $kriteria->weight,
-				'attribute' => $kriteria->attribute,
-				'status' => $kriteria->status
-			);
-			$this->Model_kriteria->insert($impor);
-		}
-		redirect(base_url('admin/data/kriteria'));
-	}
-
-	public function hapus_alternatif($id){
-		$this->Model_alternatif->delete_alternatif($id);
-		$this->session->set_flashdata('alert','dihapus');
-		redirect(base_url('admin/data/alternatif'));
-	}
-
-	public function hapus_kriteria($id){
-		$this->Model_kriteria->delete_kriteria($id);
-		$this->session->set_flashdata('alert','dihapus');
-		redirect(base_url('admin/data/kriteria'));
-	}
 }

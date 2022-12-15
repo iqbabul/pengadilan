@@ -14,7 +14,7 @@ class Hasil extends CI_Controller {
     }
 
     public function event_on(){
-		$login = $this->session->userdata('nama');
+		$login = $this->session->userdata('id_user');
 		$data['user'] = $this->Model_user->getLogin($login)->row();
 		if($data['user']->id_access == 1){
 			$data['event'] = $this->Model_event->getMaxIDAdm()->row();
@@ -37,7 +37,7 @@ class Hasil extends CI_Controller {
 
     public function index()
 	{
-		$login = $this->session->userdata('nama');
+		$login = $this->session->userdata('id_user');
 		$data['user'] = $this->Model_user->getLogin($login)->row();
 		$id_user = $data['user']->id_user;
 		$idevent = empty($this->input->post('event')) ? $this->event_on() : $this->input->post('event');
@@ -62,7 +62,7 @@ class Hasil extends CI_Controller {
 
     public function user()
 	{
-		$login = $this->session->userdata('nama');
+		$login = $this->session->userdata('id_user');
 		$data['user'] = $this->Model_user->getLogin($login)->row();
 		$id_user = $data['user']->id_user;
 		$this->load->view('layout/header',$data);

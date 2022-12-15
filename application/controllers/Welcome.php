@@ -2,24 +2,29 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Welcome extends CI_Controller {
+	function __construct(){
+		parent::__construct();
+		$this->load->model('Model_event');
+		$this->load->model('Model_alternatif');
+		$this->load->model('Model_score');
+	}
 
-	/**
-	 * Index Page for this controller.
-	 *
-	 * Maps to the following URL
-	 * 		http://example.com/index.php/welcome
-	 *	- or -
-	 * 		http://example.com/index.php/welcome/index
-	 *	- or -
-	 * Since this controller is set as the default controller in
-	 * config/routes.php, it's displayed at http://example.com/
-	 *
-	 * So any other public methods not prefixed with an underscore will
-	 * map to /index.php/welcome/<method_name>
-	 * @see https://codeigniter.com/userguide3/general/urls.html
-	 */
+	public function event_on(){
+		$data['event'] = $this->Model_event->getMaxID()->row();
+		$cek = $this->Model_event->getMaxID()->num_rows();
+		if($cek <= 0){
+			return 0;
+		}else{
+			return $data['event']->id_event;
+		}
+	}
+
 	public function index()
 	{
-		$this->load->view('welcome_message');
+		$idevent = empty($this->input->post('event')) ? $this->event_on() : $this->input->post('event');
+		$data['event'] = $this->Model_event->getAll()->result();
+		$data['eventid'] = $this->Model_event->getById($idevent)->row();
+		$data['alternatif'] = $this->Model_alternatif->getAll($idevent)->result();
+		$this->load->view('home',$data);
 	}
 }

@@ -22,6 +22,6 @@
     <link rel="stylesheet" href="<?=base_url()?>assets/css/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css">
     <!-- Custom styles for this template-->
     <link href="<?=base_url('assets/css/sb-admin-2.min.css');?>" rel="stylesheet">
-
+    <script src="<?=base_url()?>assets/css/select2/select2.min.css"></script>
 </head>
 <?php $this->load->view('layout/sidebar'); ?>

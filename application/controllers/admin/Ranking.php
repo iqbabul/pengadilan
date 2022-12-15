@@ -26,7 +26,7 @@ class Ranking extends CI_Controller {
 
     public function index()
 	{
-		$login = $this->session->userdata('nama');
+		$login = $this->session->userdata('id_user');
 		$data['user'] = $this->Model_user->getLogin($login)->row();
 		$id_user = $data['user']->id_user;
 		$idevent = empty($this->input->post('event')) ? $this->event_on() : $this->input->post('event');

@@ -11,7 +11,7 @@
         <ul class="navbar-nav bg-gradient-success sidebar sidebar-dark accordion" id="accordionSidebar">
 
             <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="<?=base_url('admin/dashboard')?>">
                 <div class="sidebar-brand-icon">
                     <img src="https://babul.diaplikasi.com/sawc/assets/images/logo.ico" width="40" class="rounded-circle mb-2" alt="">                </div>
                 <div class="sidebar-brand-text mx-3">SPK - SAW</div>
@@ -28,8 +28,13 @@
                     <span>Dashboard</span></a>
             </li>
             <?php if($user->id_access == 1): ?>
+                <li class="nav-item <?php if($p=='data') echo 'active' ?>">
+                <a class="nav-link" href="<?=base_url('admin/data')?>">
+                    <i class="fas fa-fw fa-folder"></i>
+                    <span>Data Pegawai</span></a>
+            </li>
             <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item">
+            <!-- <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
                     aria-expanded="true" aria-controls="collapseTwo">
                     <i class="fas fa-fw fa-folder"></i>
@@ -41,7 +46,7 @@
                         <a class="collapse-item <?php if($s=='kriteria') echo 'active' ?>" href="<?=base_url('admin/data/kriteria');?>">Kriteria</a>
                     </div>
                 </div>
-            </li>
+            </li> -->
             <?php elseif($user->id_access == 2): ?>
             <li class="nav-item <?php if($p=='penilaian') echo 'active' ?>">
                 <a class="nav-link" href="<?=base_url('admin/penilaian')?>">
@@ -59,11 +64,6 @@
                     <span>Perangkingan</span></a>
             </li>
             <?php endif; ?>
-            <li class="nav-item <?php if($p=='hasil') echo 'active' ?>">
-                <a class="nav-link" href="<?=base_url('admin/hasil')?>">
-                    <i class="fas fa-fw fa-chart-bar"></i>
-                    <span>Hasil</span></a>
-            </li>
             <?php if($user->id_access == 1){ ?>
             <!-- Nav Item - Pages Collapse Menu -->
             <li class="nav-item">
@@ -75,11 +75,18 @@
                 <div id="collapsePages" class="collapse <?php if($p=='setting') echo 'show' ?>" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <a class="collapse-item <?php if($s=='umum') echo 'active' ?>" href="<?=base_url('admin/setting/umum')?>">Umum</a>
-                        <a class="collapse-item <?php if($s=='user') echo 'active' ?>" href="<?=base_url('admin/setting/user')?>">Pengguna</a>
+                        <a class="collapse-item <?php if($s=='penilai') echo 'active' ?>" href="<?=base_url('admin/setting/penilai')?>">Penilai</a>
+                        <a class="collapse-item <?php if($s=='alternatif') echo 'active' ?>" href="<?=base_url('admin/setting/alternatif')?>">Kandidat</a>
+                        <a class="collapse-item <?php if($s=='kriteria') echo 'active' ?>" href="<?=base_url('admin/setting/kriteria')?>">Kriteria</a>
                     </div>
                 </div>
             </li>
             <?php } ?>
+            <li class="nav-item <?php if($p=='hasil') echo 'active' ?>">
+                <a class="nav-link" href="<?=base_url('admin/hasil')?>">
+                    <i class="fas fa-fw fa-chart-bar"></i>
+                    <span>Hasil</span></a>
+            </li>
         </ul>
         <!-- End of Sidebar -->
 
