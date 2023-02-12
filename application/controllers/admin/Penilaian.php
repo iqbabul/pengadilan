@@ -66,6 +66,9 @@ class Penilaian extends CI_Controller {
 		$id_user = $data['user']->id_user;
 		$data['eventid'] = $this->input->post('idv') ;
 		$data['alternatif'] = $this->Model_alternatif->getById($this->input->post('id'))->row();
+		$data['max'] = $this->Model_score->getMax()->row();
+		$data['min'] = $this->Model_score->getMin()->row();
+		$data['score'] = $this->Model_score->getAll()->result();
 		$this->load->view('layout/header',$data);
 		$this->load->view('admin/penilaian_edit',$data);
 		$this->load->view('layout/footer');

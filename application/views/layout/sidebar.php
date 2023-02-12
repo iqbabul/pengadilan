@@ -75,6 +75,7 @@
                 <div id="collapsePages" class="collapse <?php if($p=='setting') echo 'show' ?>" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <a class="collapse-item <?php if($s=='umum') echo 'active' ?>" href="<?=base_url('admin/setting/umum')?>">Umum</a>
+                        <a class="collapse-item <?php if($s=='jabatan') echo 'active' ?>" href="<?=base_url('admin/setting/jabatan')?>">Jabatan</a>
                         <a class="collapse-item <?php if($s=='penilai') echo 'active' ?>" href="<?=base_url('admin/setting/penilai')?>">Penilai</a>
                         <a class="collapse-item <?php if($s=='alternatif') echo 'active' ?>" href="<?=base_url('admin/setting/alternatif')?>">Kandidat</a>
                         <a class="collapse-item <?php if($s=='kriteria') echo 'active' ?>" href="<?=base_url('admin/setting/kriteria')?>">Kriteria</a>

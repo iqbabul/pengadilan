@@ -22,6 +22,8 @@
     <link rel="stylesheet" href="<?=base_url()?>assets/css/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css">
     <!-- Custom styles for this template-->
     <link href="<?=base_url('assets/css/sb-admin-2.min.css');?>" rel="stylesheet">
-    <script src="<?=base_url()?>assets/css/select2/select2.min.css"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.8/css/select2.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.8/js/select2.min.js"></script>
 </head>
 <?php $this->load->view('layout/sidebar'); ?>

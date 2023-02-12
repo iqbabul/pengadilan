@@ -16,7 +16,7 @@
 
     <!-- Bootstrap core CSS -->
     <link href="<?=base_url()?>assets/css/sb-admin-2.min.css" rel="stylesheet">
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <!-- Custom styles for this template -->
     <link href="jumbotron.css" rel="stylesheet">
   </head>
@@ -65,47 +65,146 @@
                 </div>
                 <div class="card-content">
                     <div class="card-body">
-                    <form action="<?=base_url('welcome')?>" method="post">
-                        <select class="form-control" name="event" onchange="this.form.submit()">
-                        <option value="">- Pilih -</option>
-                        <?php foreach($event as $ev):?>
+                    <form action="<?=base_url('home')?>" method="post">
+                    <select class="form-control" name="event" onchange="this.form.submit()">
+                      <option value="">- Pilih -</option>
+                        <?php $idv = $eventid->id_event; foreach($event as $ev):?>
                         <?php if($ev->id_event == $eventid->id_event):?>
-                        <option value="<?=$ev->id_event;?>" selected>
-                        <?=$ev->title?>
-                        <?php if($ev->status == 0): ?>
-                        (<span class='text-success'>Tidak Aktif</span>)
-                        <?php elseif($ev->status == 1):?> 
-                        (<span class='text-success'>Aktif</span>)
-                        <?php elseif($ev->status == 2):?> 
-                        (<span class='text-success'>Selesai</span>)
-                        <?php endif ?> 
-                        </option>
+                        <option value="<?=$ev->id_event;?>" selected><?=$ev->title?></option>
                         <?php else:?>
-                        <option value="<?=$ev->id_event;?>"><?=$ev->title?>
-                        <?php if($ev->status == 0): ?>
-                        (<span class='text-success'>Tidak Aktif</span>)
-                        <?php elseif($ev->status == 1):?> 
-                        (<span class='text-success'>Aktif</span>)
-                        <?php elseif($ev->status == 2):?> 
-                        (<span class='text-success'>Selesai</span>)
-                        <?php endif ?> 
-                        </option>
+                        <option value="<?=$ev->id_event;?>"><?=$ev->title?></option>
                         <?php endif?>
                         <?php endforeach; ?>
-                        </select>
+                      </select>
                     </form>
+                    <?php
+                      $hasil = $this->db->query("SELECT * FROM saw_result WHERE id_event = '$idv'")->row();
+                      if($hasil->status == 1): 
+                    ?>
+                    <div class="table-responsive mt-3">
+                    <div style="background-color:#97caf4;" class="text-center"><h3>MATRIKS KEPUTUSAN</h3></div>
+                    <table class="table table-bordered" width="100%" cellspacing="0" style="color:black;">
+                      <tr>
+                        <th rowspan="3" class="align-middle text-center">KANDIDAT</th>
+                        <th colspan="<?=$jmlc*$jmlp?>" class="text-center">PENILAI</th>
+                        </tr>
+                        <tr>
+                        <?php foreach($penilai1 as $p):?>
+                            <th class="text-center" colspan="<?=$jmlc?>"><?=$p->fullname;?></th>
+                            <?php endforeach;?>
+                        </tr>
+                        <tr class="text-center font-weight-bold">
+                        <?php foreach($penilai1 as $p):?>
+                            <?php 
+                            foreach($kriteria as $c):?>
+                            <td><?=$c->alias;?></td>
+                            <?php endforeach;?>
+                            <?php endforeach;?>
+                        </tr>
+                        <?php foreach($alternatif as $al): ?>
+                        <tr>
+                            <td><?=$al->fullname;?></td>
+                            <?php foreach ($penilai1 as $pp) {
+                              $us = $pp->id_user; 
+                              $alter = $al->id_alternative; 
+                              $nilai = $this->db->query("SELECT value as nilai FROM saw_evaluations WHERE id_event = '$idv' AND id_alternative = '$alter' AND id_user = '$us' ORDER BY id_criteria ASC")->result();                                        
+                              foreach($nilai  as $n){
+                                echo "<td class='text-center'>$n->nilai</td>";
+                              }
 
-                        <div class="table-responsive mt-3">
-                        <table class="table table-bordered" width="100%" cellspacing="0">
+                            }
+                                 
+                            ?>
+                        </tr>
+                        <?php endforeach; ?>
+                      </table>
+                      <div class='alert alert-info mt-3' role='alert'>
+                            Kriteria Penilaian :
+                          <ul>
+                            <?php foreach($kriteria as $c):?>
+                            <li><?=$c->alias?> = <?=$c->criteria?></li>
+                            <?php endforeach ?>
+                          </ul>
+                        </div>
+                    </div><hr>                    
+                    <div class="table-responsive mt-3">
+                    <div style="background-color:#97caf4;" class="text-center"><h3>MATRIKS NORMALISASI</h3></div>
+                      <table class="table table-bordered" width="100%" cellspacing="0" style="color:black;">
+                      <tr>
+                        <th rowspan="3" class="align-middle text-center">KANDIDAT</th>
+                        <th colspan="<?=$jmlc*$jmlp+2?>" class="text-center">PENILAI</th>
+                        </tr>
+                        <tr>
+                        <?php foreach($penilai1 as $p):?>
+                            <th class="text-center" colspan="<?=$jmlc+1?>"><?=$p->fullname;?></th>
+                            <?php endforeach;?>
+                        </tr>
+                        <tr class="text-center font-weight-bold">
+                        <?php foreach($penilai1 as $p):?>
+                            <?php 
+                            foreach($kriteria as $c):?>
+                            <td><?=$c->alias;?></td>
+                            <?php endforeach;?>
+                            <th class="text-center">Jumlah</th>
+                            <?php endforeach;?>
+                        </tr>
+                        <?php foreach($alternatif as $al): ?>
+                        <tr>
+                            <td><?=$al->fullname;?></td>
+                            <?php foreach ($penilai1 as $pp) {
+                              $us = $pp->id_user; 
+                              $alter = $al->id_alternative; 
+                              $nilai = $this->db->query("SELECT value as nilai FROM saw_evaluations WHERE id_event = '$idv' AND id_alternative = '$alter' AND id_user = '$us' ORDER BY id_criteria ASC")->result_array();                                        
+                              $item = array();
+                              foreach($nilai as $i => $nil) {
+                                  $item[]=$nil;
+                              }
+                              $x=0;
+                              $last = 0;
+                              foreach($kriteria as $c){
+                                $idc = $c->id_criteria;
+                                if($c->attribute == "benefit"){
+                                    $mm = $this->db->query("SELECT *, max(value) as mm FROM saw_evaluations WHERE id_criteria = '$idc' AND id_user = '$us'")->row(); 
+                                    $score = $item[$x++]['nilai']/$mm->mm;
+                                    echo "<td class='text-center'>".number_format($score, 3, '.', '')."</td>";
+                                }elseif($c->attribute == "cost"){
+                                    $mm = $this->db->query("SELECT *, min(value) as mm FROM saw_evaluations WHERE id_criteria = '$idc' AND id_user = '$us'")->row(); 
+                                    $score = $mm->mm/$item[$x++]['nilai'];
+                                    echo "<td class='text-center'>".number_format($score, 3, '.', '')."</td>";
+                                }
+                                $last += ($score * ($c->weight/100));
+                            }
+                            $rank[] = $last;
+                                        echo "<td class='text-center'>".number_format($last, 3, '.', '')."</td>";
+                            }
+                                 
+                            ?>
+                        </tr>
+                        <?php endforeach; ?>
+                      </table>
+                        <div class='alert alert-info mt-3' role='alert'>
+                        Kriteria Penilaian :
+                          <ul>
+                            <?php foreach($kriteria as $c):?>
+                            <li><?=$c->alias?> = <?=$c->criteria?></li>
+                            <?php endforeach ?>
+                          </ul>
+                        </div>
+                    </div><hr>
+
+                      <div class="table-responsive mt-3">
+                      <div style="background-color:#97caf4;" class="text-center"><h3>HASIL AKHIR</h3></div>
+                        <table class="table table-bordered" width="100%" cellspacing="0" style="color:black;">
                             <tr>
-                                <th rowspan="2" class="align-middle text-center">Kandidat</th>
+                                <th rowspan="2" class="align-middle text-center">KANDIDAT</th>
                                 <?php 
                                 $ev = $eventid->id_event;
+                                $us = $user->id_user;                                 
                                 $pen = $this->db->query("SELECT * FROM saw_result r 
                                         LEFT JOIN saw_users u ON u.id_user = r.id_user 
                                         WHERE id_event = '$ev' GROUP BY r.id_user")->num_rows();?>
-                                <th colspan="<?=$pen?>" class="text-center">Penilai</th>
-                                <th rowspan="2" class="align-middle text-center">Nilai Akhir</th>
+                                <th colspan="<?=$pen?>" class="text-center">PENILAI</th>
+                                <th rowspan="2" class="align-middle text-center">NILAI AKHIR</th>
                             </tr>
                             <tr class="text-center font-weight-bold">
                             <?php 
@@ -116,9 +215,12 @@
                                 <td><?=$p->nama;?></td>
                             <?php endforeach;?>
                             </tr>
-                            <?php foreach($alternatif as $al): ?>
+                            <?php
+                            $pp = $this->db->query("SELECT * FROM saw_result r INNER JOIN saw_alternatives a ON r.id_alternative = a.id_alternative INNER JOIN saw_users u ON u.id_user = a.id_user
+                            WHERE r.id_event = '$ev' GROUP BY r.id_alternative")->result();
+                            foreach($pp as $al): ?>
                                 <tr>
-                                    <td><?=$al->name;?></td>
+                                    <td><?=$al->fullname;?> <?=$al->top == 1 ? "<i class='fa fa-star checked'></i>" : "";?> </td>
                                     <?php
                                     $rata = 0;
                                     $alter = $al->id_alternative;
@@ -134,10 +236,14 @@
                         </table>
                       </div> 
                       <?php
-                           $last = $this->db->query("SELECT a.name as nama, AVG(r.score) as rata FROM saw_result r LEFT JOIN saw_alternatives a ON a.id_alternative=r.id_alternative 
-                                WHERE r.id_event = '$ev' GROUP BY r.id_alternative ORDER BY rata DESC LIMIT 1")->row();
-                                echo "<div class='alert alert-success' role='alert'>".$eventid->title." adalah <strong>".$last->nama."</strong> dengan nilai akhir <strong >".number_format($last->rata, 3, '.', '')."</strong></div>";
-                        ?>      
+                            $juara = $this->db->query("SELECT *,r.status as rstatus, fullname, AVG(r.score) as rata FROM saw_result r LEFT JOIN saw_alternatives a ON a.id_alternative=r.id_alternative
+                            LEFT JOIN saw_users u ON a.id_user = u.id_user 
+                            WHERE r.id_event = '$ev' AND r.top = 1 GROUP BY r.id_alternative ORDER BY rata DESC LIMIT 1")->row();
+                            echo "<div class='alert alert-success' role='alert'>".$eventid->title." adalah <strong>".$juara->fullname."</strong> dengan nilai akhir <strong >".number_format($juara->rata, 3, '.', '')."</strong></div>";
+                  ?>  
+                    <?php elseif($hasil->status == 0): ?>
+                      <div class='alert alert-info mt-3' role='alert'><i class="fa fa-clock-o"></i> Data sedang diproses tunggu beberapa saat lagi...</div>    
+                    <?php endif; ?>    
                     </div>
                 </div>
             </div>

@@ -56,13 +56,6 @@
     <!-- SweetAlert2 -->
     <script src="<?=base_url()?>assets/css/sweetalert2/sweetalert2.min.js"></script>
     <script src="<?=base_url()?>assets/css/select2/select2.full.min.js"></script>
-    <script>
-  $(function () {
-    //Initialize Select2 Elements
-    $('.select2').select2()
-    }
-   )
-</script>
 </body>
 
 </html>

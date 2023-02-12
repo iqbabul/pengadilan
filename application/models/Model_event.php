@@ -62,5 +62,11 @@ class Model_event extends CI_Model{
 		$this->db->where('id_event', $id);
 		$this->db->update($this->tabel);
 	}
+	public function delete($id){
+	    $this->db->where('id_event', $id);
+	    $this->db->delete($this->tabel);
+	    return true;
+	}
+
 	
 }

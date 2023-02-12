@@ -47,7 +47,7 @@ class Hasil extends CI_Controller {
 		$this->load->view('layout/header',$data);
 		if($idevent == 0){
 			if($data['user']->id_access == 1){
-				$data['alert'] = "Anda harus mengisi data di menu Pengaturan terlebih dahulu";
+				$data['alert'] = "Anda harus mengisi data di menu pengaturan umum terlebih dahulu";
 				$this->load->view('admin/error',$data);
 			}else{
 				$data['alert'] = "Aplikasi belum disetting oleh Admin";
@@ -60,13 +60,55 @@ class Hasil extends CI_Controller {
 		$this->load->view('layout/footer');
 	}
 
-    public function user()
+	public function edit($id)
 	{
 		$login = $this->session->userdata('id_user');
 		$data['user'] = $this->Model_user->getLogin($login)->row();
 		$id_user = $data['user']->id_user;
+		$data['eventid'] = $this->Model_event->getById($id)->row();
+	// echo $idevent;
 		$this->load->view('layout/header',$data);
-		$this->load->view('admin/adm_set_user',$data);
+		if($id == 0){
+			if($data['user']->id_access == 1){
+				$data['alert'] = "Anda harus mengisi data di menu pengaturan umum terlebih dahulu";
+				$this->load->view('admin/error',$data);
+			}else{
+				$data['alert'] = "Aplikasi belum disetting oleh Admin";
+				$this->load->view('admin/error',$data);
+			}
+		}else{
+			$data['alternatif'] = $this->Model_alternatif->getAll($id)->result();
+			$this->load->view('admin/adm_edit_hasil',$data);
+		}
 		$this->load->view('layout/footer');
+	}
+
+	public function simpan_edit(){
+		//print_r($this->input->post());
+		$data = array(
+			'id_event' => $this->input->post('idev'),
+			'id_alternative' => $this->input->post('idal')
+		);
+		// reset top
+		$this->db->where('id_event',$this->input->post('idev'));
+		$this->db->update('saw_result',['top'=>'0']);
+		// update top
+		$this->db->where($data);
+		$this->db->update('saw_result',['top'=>'1']);
+		$this->session->set_flashdata('success','Hasil telah diubah');
+		redirect(base_url('admin/hasil/edit/'.$this->input->post('idev')));		
+	}
+
+	public function publikasi($id)
+	{
+		$this->db->query("UPDATE saw_result SET status = '1' WHERE id_event = '$id'");
+		$this->session->set_flashdata('success','Hasil telah dipublikasi');
+		redirect(base_url('admin/hasil'));		
+	}
+	public function privasi($id)
+	{
+		$this->db->query("UPDATE saw_result SET status = '0' WHERE id_event = '$id'");
+		$this->session->set_flashdata('success','Hasil telah diprivasi');
+		redirect(base_url('admin/hasil'));		
 	}
 }

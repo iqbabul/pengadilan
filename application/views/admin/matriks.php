@@ -1,3 +1,5 @@
+<?php ini_set('display_errors', 0); ?>
+
 <!-- Begin Page Content -->
 <div class="container-fluid">
     <!-- Page Heading -->

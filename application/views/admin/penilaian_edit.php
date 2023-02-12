@@ -6,17 +6,26 @@
         <div class="col-12">
             <div class="card card shadow mb-4">
                 <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-success"><?=$alternatif->name;?></h6>
+                    <h6 class="m-0 font-weight-bold text-success"><?=$alternatif->fullname;?></h6>
                 </div>
                 <div class="card-content">
                     <div class="card-body">
                     <div class="alert alert-primary" role="alert">
-                        <h4>Petunjuk Pengisian</h4>
-                        <ol>
-                            <li>Berikanlah Nilai/Bobot : dari angka 1 s/d 5</li>
-                            <li>Nilai 1 : <strong>Sangat Tidak Berpengaruh</strong></li>
-                            <li>Nilai 5 : <strong>Sangat Berpengaruh</strong></li>
-                        </ol>
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <h4>Petunjuk Pengisian</h4>
+                                <ol>
+                                    <li>Berikanlah Nilai/Bobot : dari angka <?=$min->min;?> s/d <?=$max->max;?></li>
+                                    <?php foreach($score as $sc): ?>
+                                    <li>Nilai <?=$sc->score;?> : <strong><?=$sc->ket;?></strong></li>
+                                    <?php endforeach ?>
+                                </ol>
+                            </div>
+                            <div class="col-lg-6 text-center">
+                                <img src="<?=base_url()?>assets/img/user/<?=$alternatif->foto?>" width="100" class="mb-2" alt="">
+                                <br><?=$alternatif->fullname;?>
+                            </div>
+                        </div>
                     </div>
                         <?php 
                             $idv = $eventid;
@@ -44,7 +53,16 @@
                                             <td class="text-center">
                                                 <?php if($sult->evstatus == 1): ?>
                                                 <input type="hidden" name="kriteria[]" value="<?=$sult->id_criteria;?>">
-                                                <input type="number" class="form-control" name="nilai[]" value="<?=$sult->value;?>" min="1" max="5" required>
+                                                <select name="nilai[]" id="" class="form-control" required>
+                                                <?php foreach($score as $sc): ?>  
+                                                <?php if($sc->score == $sult->value): ?>
+                                                <option value="<?=$sc->score;?>" selected><?=$sc->score;?> (<?=$sc->ket;?>)</option>
+                                                <?php else: ?>
+                                                <option value="<?=$sc->score;?>"><?=$sc->score;?> (<?=$sc->ket;?>)</option>
+                                                <?php endif; ?>
+                                                <?php endforeach ?>
+                                                </select>
+                                                <!-- <input type="number" class="form-control" name="nilai[]" value="<?=$sult->value;?>" min="1" max="5" required> -->
                                                 <?php elseif($sult->evstatus == 2): ?>
                                                 <?=$sult->value;?>
                                                 <?php endif; ?>

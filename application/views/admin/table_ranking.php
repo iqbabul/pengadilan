@@ -22,7 +22,7 @@
                                 </tr>
                                 <?php foreach($alternatif as $al): ?>
                                 <tr>
-                                    <td><?=$al->name;?></td>
+                                    <td><?=$al->fullname;?></td>
                                     <?php 
                                         $ev = $eventid->id_event;
                                         $us = $user->id_user; 
@@ -40,16 +40,16 @@
                                             if($c->attribute == "benefit"){
                                                 $mm = $this->db->query("SELECT *, max(value) as mm FROM saw_evaluations WHERE id_criteria = '$idc' AND id_user = '$us'")->row(); 
                                                 $score = $item[$x++]['nilai']/$mm->mm;
-                                                echo "<td class='text-center'>".number_format($score, 2, '.', '')."</td>";
+                                                echo "<td class='text-center'>".number_format($score, 3, '.', '')."</td>";
                                             }elseif($c->attribute == "cost"){
                                                 $mm = $this->db->query("SELECT *, min(value) as mm FROM saw_evaluations WHERE id_criteria = '$idc' AND id_user = '$us'")->row(); 
                                                 $score = $mm->mm/$item[$x++]['nilai'];
-                                                echo "<td class='text-center'>".number_format($score, 2, '.', '')."</td>";
+                                                echo "<td class='text-center'>".number_format($score, 3, '.', '')."</td>";
                                             }
                                             $last += ($score * ($c->weight/100));
                                         }
                                         $rank[] = $last;
-                                        echo "<td class='text-center'>".number_format($last, 2, '.', '')."</td>";
+                                        echo "<td class='text-center'>".number_format($last, 3, '.', '')."</td>";
                                         //echo "<td class='text-center'>".ranking($rank)."</td>";
                                         $data = array(
                                             'id_event' => $ev,
@@ -77,12 +77,12 @@
                                 </tr>
                                 <?php
                                     $urut=1;
-                                    $sult = $this->db->query("SELECT * FROM saw_result r LEFT JOIN saw_alternatives a ON a.id_alternative = r.id_alternative WHERE r.id_event = '$ev' AND r.id_user = '$us' ORDER BY score DESC")->result_array();
+                                    $sult = $this->db->query("SELECT * FROM saw_result r LEFT JOIN saw_alternatives a ON a.id_alternative = r.id_alternative LEFT JOIN saw_users u ON a.id_user = u.id_user WHERE r.id_event = '$ev' AND r.id_user = '$us' ORDER BY score DESC")->result_array();
                                     foreach($sult as $hasil){
                                         echo "<tr>";
                                         echo "<td class='text-center'>".$urut++."</td>";
-                                        echo "<td>".$hasil['name']."</td>";
-                                        echo "<td class='text-center'>".number_format($hasil['score'], 2, '.', '')."</td>";
+                                        echo "<td>".$hasil['fullname']."</td>";
+                                        echo "<td class='text-center'>".number_format($hasil['score'], 3, '.', '')."</td>";
                                         echo "</tr>";    
                                     }
                                 ?>                                

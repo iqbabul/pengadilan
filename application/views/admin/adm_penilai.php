@@ -1,6 +1,3 @@
-<?php
-  error_reporting(0);
-?>
 <!-- Begin Page Content -->
 <div class="container-fluid">
     <!-- Page Heading -->
@@ -38,7 +35,6 @@
     <div class="row mb-4">
       <div class="col-6">
       <?php if($eventid->status == 0): ?>
-        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm" data-toggle="modal" data-target="#exampleModal1">Impor Data</a>        
         <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm" data-toggle="modal" data-target="#exampleModal">Tambah Penilai</a>        
       <?php endif ?>
       </div>
@@ -46,34 +42,51 @@
     <div class="flash-data" data-flashdata="<?=$this->session->flashdata('alert');?>"></div>      
     <!-- Content Row -->
     <div class="row">
-        <?php $no=1; foreach($alternatif as $row): ?>
-        <div class="col-sm-3 mb-3">
-            <div class="card">
-                <img class="card-img-top" src="<?=base_url()?>assets/img/alternatif/<?=$row->photo;?>" alt="Card image cap">
-                <div class="card-body">
-                    <h5 class="card-title"><?=$row->name;?></h5>
-                    <p class="card-text"><?=$row->jabatan;?></p><hr>
-                    <?php if($eventid->status != 2): ?>
-                    <form action="<?=base_url('admin/setting/penilai')?>" method="post">
-                      <?php if($row->status == 1):?>
-                      <input type="hidden" name="status" value="0">
-                      <button type="submit" class="btn btn-sm btn-circle btn-success" title="Pasifkan"><i class="fas fa-check"></i></button>
-                      <?php else:?>
-                      <input type="hidden" name="status" value="1">
-                      <button type="submit" class="btn btn-sm btn-circle btn-danger" title="Aktifkan"><i class="fas fa-times"></i></button>
-                      <?php endif?>
-                      <button class="btn btn-sm btn-circle btn-primary"><i class="fas fa-edit"></i></button>
-                      <?php if($eventid->status == 0): ?>
-                      <a href="<?=base_url();?>admin/data/hapus_alternatif/<?=$row->id_alternative;?>" class="btn btn-sm btn-circle btn-danger tombol-hapus"><i class="fas fa-trash"></i></a>
-                      <?php endif; ?>
-                      <input type="hidden" name="id" value="<?=$row->id_alternative;?>">
-                    </form>
-                    <?php endif ?>
+    <div class="col-12">
+            <div class="card card shadow mb-4">
+                <div class="card-header py-3">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <h6 class="m-0 font-weight-bold text-success">Data Penilai</h6>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-content">
+                    <div class="card-body">
+                      <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th width="5%">No</th>
+                                <th>Foto</th>
+                                <th>Nama</th>
+                                <th>Jabatan</th>
+                                <th>Username</th>
+                                <th class="text-center">Password</th>
+                                <th class="text-center">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php $no=1; foreach($penilai as $row): ?>
+                            <tr>
+                                <td><?=$no++;?></td>
+                                <td class="text-center"><img src="<?=base_url()?>assets/img/user/<?=$row->foto?>" alt="" class="rounded-circle" width="50"></td>
+                                <td><?=$row->fullname;?></td>
+                                <td><?=$row->position_name;?></td>
+                                <td><span class="badge badge-primary"><?=$row->username ?></span></td>
+                                <td><span class="badge badge-success"><?=base64_decode($row->password);?></span></td>
+                                <td class="text-center">
+                                  <a href="<?=base_url()?>admin/setting/penilai_hapus/<?=$row->id_login;?>" class="btn btn-sm btn-danger" onclick="return confirm('Yakin Hapus <?=$row->fullname;?>?')"><i class="fa fa-trash"></i></a>
+                                </td>
+                            </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                      </table>  
+                    </div>
                 </div>
             </div>
         </div>
-        <?php endforeach; ?>
-    </div>
+
+  </div>
 </div>
 <!-- /.container-fluid -->
 <!-- Modal -->
@@ -86,22 +99,18 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <form method="post"  action="<?=base_url('admin/setting/simpan_penilai')?> ">
+      <form method="post" action="<?=base_url('admin/setting/penilai_simpan')?> ">
         <div class="modal-body">        
           <div class="form-group">
             <label for="exampleInputEmail1">Nama Penilai</label>
-            <select class="form-control select2" multiple="multiple" data-placeholder="Select a State">  
-                <option value="AL">Alabama</option>
-                <option>Alabama</option>
-                <option>Alaska</option>
-                <option>California</option>
-                <option>Delaware</option>
-                <option>Tennessee</option>
-                <option>Texas</option>
-                <option>Washington</option>
-            </select>          
-            </div>
+            <select class="form-control" id="theSelect" name="penilai[]" multiple="multiple" style="width: 100%;">
+              <?php foreach($usr as $us): ?>
+              <option value="<?=$us->id_user?>"><?=$us->fullname;?> [<?=$us->position_name?>]</option>
+              <?php endforeach; ?>
+            </select>
+            <input type="hidden" value="<?=$eventid->id_event?>" name="idevent">
           </div>
+        </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Close</button>
           <button type="submit" class="btn btn-sm btn-success">Simpan</button>
@@ -110,65 +119,30 @@
     </div>
   </div>
 </div>
-<!-- Modal -->
-<div class="modal fade" id="exampleModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Impor Data</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <form method="post" action="<?=base_url('admin/data/impor_alternatif')?> ">
-        <div class="modal-body">        
-          <div class="form-group">
-            <label for="exampleInputEmail1">Acara</label>
-            <select class="form-control" name="event"">
-              <option value="">- Pilih -</option>
-                <?php foreach($eventD as $ev):?>
-                <option value="<?=$ev->id_event;?>"><?=$ev->title?><?= $ev->status == 1 ? " (<span class='text-success'>Aktif</span>)" : " (<span class='text-success'>Selesai</span>)"; ?></option>
-                <?php endforeach; ?>
-            </select>
-            <input type="hidden" name="ev" value="<?=$eventid->id_event?>">
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="submit" class="btn btn-sm btn-danger">Impor</button>
-        </div>
-      </form>      
-    </div>
-  </div>
-</div>
 <script>
-  $(function() {
-    var flashData = $('.flash-data').data('flashdata');
-    var Toast = Swal.mixin({
-      toast: true,
-      position: 'top-end',
-      showConfirmButton: false,
-      timer: 3000
-    });
-    if (flashData) {
-      toastr.success('Data berhasil '+flashData+'.')
+  $(function () {
+    $("#theSelect").select2();
     }
-    //tombol-hapus
-    $('.tombol-hapus').on('click', function(e){
-      e.preventDefault(); // mematikan aksi default
-      var href = $(this).attr('href');
-      Swal.fire({
-        title: 'Peringatan!',
-        text: "Apakah ingin menghapus data ini?",
-          icon: 'warning',
-          showCancelButton: true,
-          confirmButtonColor: '#3085d6',
-          cancelButtonColor: '#d33',
-          confirmButtonText: 'Ya, hapus!'
-      }).then((result) => {
-        if (result.value) {
-          document.location.href = href;
-        }
-      });
-    });     
+   )
+</script>
+<!-- <script type="text/javascript">
+  $(".theSelect").change(function(){
+    var id = $(".theSelect").val();
+    console.log('helo');
   });    
+</script> -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
+<script type="text/javascript">
+<?php if($this->session->flashdata('success')){ ?>
+    toastr.success("<?php echo $this->session->flashdata('success'); ?>");
+<?php }else if($this->session->flashdata('error')){  ?>
+    toastr.error("<?php echo $this->session->flashdata('error'); ?>");
+<?php }else if($this->session->flashdata('warning')){  ?>
+    toastr.warning("<?php echo $this->session->flashdata('warning'); ?>");
+<?php }else if($this->session->flashdata('info')){  ?>
+    toastr.info("<?php echo $this->session->flashdata('info'); ?>");
+<?php } ?>
+
+
 </script>

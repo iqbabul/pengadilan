@@ -6,7 +6,7 @@
         <div class="col-12">
             <div class="card card shadow mb-4">
                 <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-success"><?=$alternatif->name;?></h6>
+                    <h6 class="m-0 font-weight-bold text-success"><?=$alternatif->fullname;?></h6>
                 </div>
                 <div class="card-content">
                     <div class="card-body">
@@ -22,8 +22,8 @@
                                 </ol>
                             </div>
                             <div class="col-lg-6 text-center">
-                                <img src="<?=base_url()?>assets/img/alternatif/<?=$alternatif->photo?>" width="100" class="mb-2" alt="">
-                                <br><?=$alternatif->name;?>
+                                <img src="<?=base_url()?>assets/img/user/<?=$alternatif->foto?>" width="100" class="mb-2" alt="">
+                                <br><?=$alternatif->fullname;?>
                             </div>
                         </div>
                     </div>
@@ -34,7 +34,7 @@
                                         <tr>
                                             <th>No</th>
                                             <th colspan="2">Kriteria</th>
-                                            <th width="15%" class="text-center">Nilai</th>
+                                            <th width="20%" class="text-center">Nilai</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -45,7 +45,13 @@
                                             <td><?=$sult->criteria;?></td>
                                             <td class="text-right">
                                                 <input type="hidden" name="kriteria[]" value="<?=$sult->id_criteria;?>">
-                                                <input type="number" class="form-control" name="nilai[]" min="<?=$min->min;?>" max="<?=$max->max;?>" required>
+                                                <select name="nilai[]" id="" class="form-control" required>
+                                                <option value="">-Pilih-</option>
+                                                <?php foreach($score as $sc): ?>  
+                                                    <option value="<?=$sc->score;?>"><?=$sc->score;?> (<?=$sc->ket;?>)</option>
+                                                <?php endforeach ?>
+                                                </select>
+                                                <!-- <input type="number" class="form-control" name="nilai[]" min="<?=$min->min;?>" max="<?=$max->max;?>" required> -->
                                             </td>
                                         </tr>
                                         <?php endforeach?>

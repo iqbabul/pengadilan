@@ -19,7 +19,7 @@
                                 </tr>
                                 <?php foreach($alternatif as $al): ?>
                                 <tr>
-                                    <td><?=$al->name;?></td>
+                                    <td><?=$al->fullname;?></td>
                                     <?php 
                                     $ev = $eventid->id_event;
                                     $us = $user->id_user; 
@@ -56,7 +56,7 @@
                                     </tr>
                                     <?php foreach($alternatif as $al): ?>
                                     <tr>
-                                        <td><?=$al->name;?></td>
+                                        <td><?=$al->fullname;?></td>
                                         <?php 
                                             $us = $user->id_user; 
                                             $alter = $al->id_alternative; 
@@ -70,10 +70,10 @@
                                                 $idc = $c->id_criteria;
                                                 if($c->attribute == "benefit"){
                                                     $mm = $this->db->query("SELECT *, max(value) as mm FROM saw_evaluations WHERE id_criteria = '$idc' AND id_user = '$us'")->row(); 
-                                                    echo "<td class='text-center'>".number_format($item[$x++]['nilai']/$mm->mm, 2, '.', '')."</td>";
+                                                    echo "<td class='text-center'>".number_format($item[$x++]['nilai']/$mm->mm, 3, '.', '')."</td>";
                                                 }elseif($c->attribute == "cost"){
                                                     $mm = $this->db->query("SELECT *, min(value) as mm FROM saw_evaluations WHERE id_criteria = '$idc' AND id_user = '$us'")->row(); 
-                                                    echo "<td class='text-center'>".number_format($mm->mm/$item[$x++]['nilai'], 2, '.', '')."</td>";
+                                                    echo "<td class='text-center'>".number_format($mm->mm/$item[$x++]['nilai'], 3, '.', '')."</td>";
                                                 }
                                             }
                                         ?>

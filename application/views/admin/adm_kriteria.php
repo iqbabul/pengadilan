@@ -3,7 +3,7 @@
 <div class="container-fluid">
     <!-- Page Heading -->
     <div class="d-sm-flex mb-4">
-      <form action="<?=base_url('admin/data/kriteria')?>" method="post">
+      <form action="<?=base_url('admin/setting/kriteria')?>" method="post">
         <select class="form-control" name="event" onchange="this.form.submit()">
         <option value="">- Pilih -</option>
           <?php foreach($event as $ev):?>
@@ -79,7 +79,7 @@
                                     <button class="btn btn-sm btn-circle btn-primary"><i class="fas fa-edit"></i></button>
                                     </td>
                                     <td class="text-center">
-                                        <a href="<?=base_url();?>admin/data/hapus_kriteria/<?=$row->id_criteria;?>" class="btn btn-sm btn-circle btn-danger tombol-hapus"><i class="fas fa-trash"></i></button>
+                                        <a href="<?=base_url();?>admin/setting/hapus_kriteria/<?=$row->id_criteria;?>" class="btn btn-sm btn-circle btn-danger tombol-hapus" onclick="return confirm('Yakin Hapus <?=$row->criteria;?>?')"><i class="fas fa-trash"></i></button>
                                     </td>
                                     <?php endif ?>
                                 </tr>
@@ -122,7 +122,7 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <form method="post" action="<?=base_url('admin/data/simpan_kriteria')?> ">
+      <form method="post" action="<?=base_url('admin/setting/simpan_kriteria')?> ">
         <div class="modal-body">        
           <div class="form-group">
             <label for="exampleInputEmail1">Kriteria</label>
@@ -168,7 +168,7 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <form method="post" action="<?=base_url('admin/data/impor_kriteria')?> ">
+      <form method="post" action="<?=base_url('admin/setting/impor_kriteria')?> ">
         <div class="modal-body">        
           <div class="form-group">
             <label for="exampleInputEmail1">Acara</label>
@@ -189,35 +189,18 @@
   </div>
 </div>
 <?php endif ?>
-<script>
-  $(function() {
-    var flashData = $('.flash-data').data('flashdata');
-    var Toast = Swal.mixin({
-      toast: true,
-      position: 'top-end',
-      showConfirmButton: false,
-      timer: 3000
-    });
-    if (flashData) {
-      toastr.success('Data berhasil '+flashData+'.')
-    }
-    //tombol-hapus
-    $('.tombol-hapus').on('click', function(e){
-      e.preventDefault(); // mematikan aksi default
-      var href = $(this).attr('href');
-      Swal.fire({
-        title: 'Peringatan!',
-        text: "Apakah ingin menghapus data ini?",
-          icon: 'warning',
-          showCancelButton: true,
-          confirmButtonColor: '#3085d6',
-          cancelButtonColor: '#d33',
-          confirmButtonText: 'Ya, hapus!'
-      }).then((result) => {
-        if (result.value) {
-          document.location.href = href;
-        }
-      });
-    });     
-  });    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
+<script type="text/javascript">
+<?php if($this->session->flashdata('success')){ ?>
+    toastr.success("<?php echo $this->session->flashdata('success'); ?>");
+<?php }else if($this->session->flashdata('error')){  ?>
+    toastr.error("<?php echo $this->session->flashdata('error'); ?>");
+<?php }else if($this->session->flashdata('warning')){  ?>
+    toastr.warning("<?php echo $this->session->flashdata('warning'); ?>");
+<?php }else if($this->session->flashdata('info')){  ?>
+    toastr.info("<?php echo $this->session->flashdata('info'); ?>");
+<?php } ?>
+
+
 </script>

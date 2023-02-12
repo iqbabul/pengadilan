@@ -18,7 +18,7 @@ class Login extends CI_Controller {
 		$password = $this->input->post('password');
 		$where = array(
 			'username' => $username,
-			'password' => md5($password)
+			'password' => base64_encode($password)
 			);
 		$cek = $this->Model_login->cek_login($where)->num_rows();
 		if($cek > 0){

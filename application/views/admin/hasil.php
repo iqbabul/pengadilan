@@ -50,9 +50,12 @@
                                 <td><?=$p->nama;?></td>
                             <?php endforeach;?>
                             </tr>
-                            <?php foreach($alternatif as $al): ?>
+                            <?php
+                            $pp = $this->db->query("SELECT * FROM saw_result r INNER JOIN saw_alternatives a ON r.id_alternative = a.id_alternative INNER JOIN saw_users u ON u.id_user = a.id_user
+                            WHERE r.id_event = '$ev' GROUP BY r.id_alternative")->result();
+                            foreach($pp as $al): ?>
                                 <tr>
-                                    <td><?=$al->name;?></td>
+                                    <td><?=$al->fullname;?> <?=$al->top == 1 ? "<i class='fa fa-star checked'></i>" : "";?> </td>
                                     <?php
                                     $rata = 0;
                                     $alter = $al->id_alternative;
@@ -68,10 +71,73 @@
                         </table>
                       </div> 
                       <?php
-                           $last = $this->db->query("SELECT a.name as nama, AVG(r.score) as rata FROM saw_result r LEFT JOIN saw_alternatives a ON a.id_alternative=r.id_alternative 
-                                WHERE r.id_event = '$ev' GROUP BY r.id_alternative ORDER BY rata DESC LIMIT 1")->row();
-                                echo "<div class='alert alert-success' role='alert'>".$eventid->title." adalah <strong>".$last->nama."</strong> dengan nilai akhir <strong >".number_format($last->rata, 3, '.', '')."</strong></div>";
-                        ?>      
+                        //    $last = $this->db->query("SELECT *,r.status as rstatus, fullname, AVG(r.score) as rata FROM saw_result r LEFT JOIN saw_alternatives a ON a.id_alternative=r.id_alternative
+                        //         LEFT JOIN saw_users u ON a.id_user = u.id_user 
+                        //         WHERE r.id_event = '$ev' GROUP BY r.id_alternative ORDER BY rata DESC LIMIT 1")->row();
+                           $hasil = $this->db->query("SELECT * FROM (SELECT fullname, r.id_event as id_event, r.id_alternative as idkandidat, r.status as rstatus, r.top as top,AVG(r.score) as rata FROM saw_result r 
+                           INNER JOIN saw_alternatives a ON a.id_alternative=r.id_alternative
+                           INNER JOIN saw_users u ON a.id_user = u.id_user 
+                           WHERE r.id_event = '$ev' GROUP BY r.id_alternative ORDER BY rata DESC) AS beres WHERE rata = (
+                           SELECT rata FROM ( 
+                           SELECT fullname,r.id_event as id_event, r.id_alternative as idkandidat, r.status as rstatus, r.top as top, AVG(r.score) as rata FROM saw_result r 
+                           INNER JOIN saw_alternatives a ON a.id_alternative=r.id_alternative
+                           INNER JOIN saw_users u ON a.id_user = u.id_user 
+                           WHERE r.id_event = '$ev' GROUP BY r.id_alternative ORDER BY rata DESC) AS hasil GROUP BY rata HAVING COUNT(*) > 1)")->num_rows();
+                           
+                           $mbuh = $this->db->query("SELECT * FROM (SELECT fullname, r.id_event as id_event, r.id_alternative as idkandidat, r.status as rstatus, r.top as top,AVG(r.score) as rata FROM saw_result r 
+                           INNER JOIN saw_alternatives a ON a.id_alternative=r.id_alternative
+                           INNER JOIN saw_users u ON a.id_user = u.id_user 
+                           WHERE r.id_event = '$ev' GROUP BY r.id_alternative ORDER BY rata DESC) AS beres WHERE rata = (
+                           SELECT rata FROM ( 
+                           SELECT fullname,r.id_event as id_event, r.id_alternative as idkandidat, r.status as rstatus, r.top as top, AVG(r.score) as rata FROM saw_result r 
+                           INNER JOIN saw_alternatives a ON a.id_alternative=r.id_alternative
+                           INNER JOIN saw_users u ON a.id_user = u.id_user 
+                           WHERE r.id_event = '$ev' GROUP BY r.id_alternative ORDER BY rata DESC) AS hasil GROUP BY rata HAVING COUNT(*) > 1) LIMIT 1")->row();                           
+                           
+                           if($hasil > 0){
+                            $juara = $this->db->query("SELECT *,r.status as rstatus, fullname, AVG(r.score) as rata FROM saw_result r LEFT JOIN saw_alternatives a ON a.id_alternative=r.id_alternative
+                            LEFT JOIN saw_users u ON a.id_user = u.id_user 
+                            WHERE r.id_event = '$ev' AND r.top = 1 GROUP BY r.id_alternative ORDER BY rata DESC LIMIT 1")->row();
+                            if($user->id_user == 1){
+                                echo "<div class='alert alert-success' role='alert'>".$eventid->title." adalah <strong>".$juara->fullname."</strong> dengan nilai akhir <strong >".number_format($juara->rata, 3, '.', '')."</strong></div>";
+                                if ($mbuh->rstatus == '0') {
+                                    echo "<a href='".base_url()."admin/hasil/publikasi/".$mbuh->id_event."' class='btn btn-sm btn-primary' onclick=\"return confirm('Yakin akan dipublikasi ?')\"><i class='fa fa-globe'></i> Publikasikan</a> ";    
+                                    echo "<a href='".base_url()."admin/hasil/edit/".$mbuh->id_event."' class='btn btn-sm btn-danger'><i class='fa fa-edit'></i> Edit Hasil</a>";    
+                                  }elseif($mbuh->rstatus == '1'){
+                                      echo "<a href='".base_url()."admin/hasil/privasi/".$mbuh->id_event."' class='btn btn-sm btn-danger' onclick=\"return confirm('Yakin akan diprivasi ?')\"><i class='fa fa-globe'></i> Privasi</a>";                                    
+                                  }      
+                            }else{
+                                echo "<div class='alert alert-success' role='alert'>".$eventid->title." adalah <strong>".$juara->fullname."</strong> dengan nilai akhir <strong >".number_format($juara->rata, 3, '.', '')."</strong></div>";
+                            }
+                           }else{
+                                if($user->id_user == 1){
+                                    $last = $this->db->query("SELECT *,r.status as rstatus, fullname, AVG(r.score) as rata FROM saw_result r LEFT JOIN saw_alternatives a ON a.id_alternative=r.id_alternative
+                                    LEFT JOIN saw_users u ON a.id_user = u.id_user 
+                                    WHERE r.id_event = '$ev' GROUP BY r.id_alternative ORDER BY rata DESC LIMIT 1")->row();
+                                    $dt = array(
+                                        'id_event' => $ev,
+                                        'id_alternative' => $last->id_alternative
+                                    );
+                                    $this->db->where($dt);
+                                    $this->db->update('saw_result',['top'=>'1']);
+                                    $juara = $this->db->query("SELECT *,r.status as rstatus, fullname, AVG(r.score) as rata FROM saw_result r LEFT JOIN saw_alternatives a ON a.id_alternative=r.id_alternative
+                                    LEFT JOIN saw_users u ON a.id_user = u.id_user 
+                                    WHERE r.id_event = '$ev' AND r.top = 1 GROUP BY r.id_alternative ORDER BY rata DESC LIMIT 1")->row();
+                                    echo "<div class='alert alert-success' role='alert'>".$eventid->title." adalah <strong>".$juara->fullname."</strong> dengan nilai akhir <strong >".number_format($juara->rata, 3, '.', '')."</strong></div>";
+                                        if ($last->rstatus == '0') {
+                                        echo "<a href='".base_url()."admin/hasil/publikasi/".$last->id_event."' class='btn btn-sm btn-primary' onclick=\"return confirm('Yakin akan dipublikasi ?')\"><i class='fa fa-globe'></i> Publikasikan</a> ";    
+                                      }elseif($last->rstatus == '1'){
+                                          echo "<a href='".base_url()."admin/hasil/privasi/".$last->id_event."' class='btn btn-sm btn-danger' onclick=\"return confirm('Yakin akan diprivasi ?')\"><i class='fa fa-globe'></i> Privasi</a>";                                    
+                                      }      
+                                }else{
+                                    $juara = $this->db->query("SELECT *,r.status as rstatus, fullname, AVG(r.score) as rata FROM saw_result r LEFT JOIN saw_alternatives a ON a.id_alternative=r.id_alternative
+                                    LEFT JOIN saw_users u ON a.id_user = u.id_user 
+                                    WHERE r.id_event = '$ev' AND r.top = 1 GROUP BY r.id_alternative ORDER BY rata DESC LIMIT 1")->row();
+                                    echo "<div class='alert alert-success' role='alert'>".$eventid->title." adalah <strong>".$juara->fullname."</strong> dengan nilai akhir <strong >".number_format($juara->rata, 3, '.', '')."</strong></div>";
+                                }
+                               }
+                                // echo "<div class='alert alert-success' role='alert'>".$eventid->title." adalah <strong>".$last->fullname."</strong> dengan nilai akhir <strong >".number_format($last->rata, 3, '.', '')."</strong></div>";
+                        ?>  
                     </div>
                 </div>
             </div>
@@ -79,3 +145,18 @@
     </div>
 </div>
 <!-- /.container-fluid -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
+<script type="text/javascript">
+<?php if($this->session->flashdata('success')){ ?>
+    toastr.success("<?php echo $this->session->flashdata('success'); ?>");
+<?php }else if($this->session->flashdata('error')){  ?>
+    toastr.error("<?php echo $this->session->flashdata('error'); ?>");
+<?php }else if($this->session->flashdata('warning')){  ?>
+    toastr.warning("<?php echo $this->session->flashdata('warning'); ?>");
+<?php }else if($this->session->flashdata('info')){  ?>
+    toastr.info("<?php echo $this->session->flashdata('info'); ?>");
+<?php } ?>
+
+
+</script>

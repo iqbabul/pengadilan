@@ -51,6 +51,7 @@
                                                 <?php if($row->status == 0): ?>
                                                 <li><a class="dropdown-item" href="<?=base_url('admin/setting/event_aktif')?>/<?=$row->id_event;?>">Aktifkan</a></li>
                                                 <li><a class="dropdown-item" href="#" data-toggle="modal" data-target="#exampleModal1<?=$row->id_event;?>">Edit</a></li>
+                                                <li><a class="dropdown-item" class="tombol-hapus" href="<?=base_url('admin/setting/hapus_event')?>/<?=$row->id_event;?>" onclick="return confirm('Yakin Hapus <?=$row->title;?>?')">Hapus</a></li>
                                                 <?php elseif($row->status == 1): ?>
                                                 <li><a class="dropdown-item" href="<?=base_url('admin/setting/event_pasif')?>/<?=$row->id_event;?>">Pasifkan</a></li>
                                                 <li><a class="dropdown-item" href="<?=base_url('admin/setting/event_done')?>/<?=$row->id_event;?>">Selesai</a></li>
@@ -146,7 +147,7 @@
                                             <td class="text-center"><?=$sc->score;?></td>
                                             <td>
                                                 <input type="hidden" name="sc[]" value="<?=$sc->id_score;?>">
-                                                <input type="text" class="form-control" name="ket[]" value="<?=$sc->ket; ?>">
+                                                <input type="text" class="form-control" name="ket[]" required value="<?=$sc->ket; ?>">
                                             </td>
                                         </tr>
                                     <?php endforeach ?>
@@ -181,7 +182,7 @@
         <div class="modal-body">        
           <div class="form-group">
             <label for="exampleInputEmail1">Nama Acara</label>
-            <input type="text" class="form-control" name="acara">
+            <input type="text" class="form-control" name="acara" required>
           </div>
         </div>
         <div class="modal-footer">
@@ -191,3 +192,18 @@
     </div>
   </div>
 </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
+<script type="text/javascript">
+<?php if($this->session->flashdata('success')){ ?>
+    toastr.success("<?php echo $this->session->flashdata('success'); ?>");
+<?php }else if($this->session->flashdata('error')){  ?>
+    toastr.error("<?php echo $this->session->flashdata('error'); ?>");
+<?php }else if($this->session->flashdata('warning')){  ?>
+    toastr.warning("<?php echo $this->session->flashdata('warning'); ?>");
+<?php }else if($this->session->flashdata('info')){  ?>
+    toastr.info("<?php echo $this->session->flashdata('info'); ?>");
+<?php } ?>
+
+
+</script>

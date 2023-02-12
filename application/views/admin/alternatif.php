@@ -5,10 +5,10 @@
         <?php $no=1; foreach($alternatif as $row): ?>
         <div class="col-sm-3 mb-3">
             <div class="card">
-                <img class="card-img-top" src="<?=base_url()?>assets/img/alternatif/<?=$row->photo;?>" alt="Card image cap">
+                <img class="card-img-top" src="<?=base_url()?>assets/img/user/<?=$row->foto;?>" alt="Card image cap">
                 <div class="card-body">
-                    <h5 class="card-title"><?=$row->name;?></h5>
-                    <p class="card-text"><?=$row->jabatan;?></p><hr>
+                    <h5 class="card-title"><?=$row->fullname;?></h5>
+                    <p class="card-text"><?=$row->position_name;?></p><hr>
                     <?php
                         $usr = $user->id_user;
                         $id_alternatif = $row->id_alternative;
